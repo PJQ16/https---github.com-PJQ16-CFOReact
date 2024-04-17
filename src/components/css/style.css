@@ -1,0 +1,13 @@
+/* styles.css */
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* ทำให้หน้าเว็บไซต์ขยายตามขนาดของหน้าจอ */
+  }
+  
+  footer {
+    margin-top: auto; /* ทำให้ Footer ยึดด้านล่างของหน้าเว็บไซต์ */
+    width: 100%; /* ทำให้ Footer กว้างเท่ากับพื้นที่เนื้อหา */
+    background-color: #f8f9fa;
+  }
+  
