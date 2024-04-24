@@ -103,6 +103,7 @@ function TabActivityLocation() {
 return (
   <div>
     <div className="row">
+      <p className='h2 text-center'>แผนภาพองค์กร</p>
       <div className="col-md-12 d-flex justify-content-center">
         {showImages.length > 0 ? (
           showImages.map((image) => (

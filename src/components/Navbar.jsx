@@ -79,9 +79,9 @@ function Navbar() {
   return (
     <div>
       <nav className="navbar" style={{ background: 'linear-gradient(90deg, rgba(31,31,37,1) 0%, rgba(61,62,80,1) 50%, rgba(103,117,134,1) 100%)' }}>
-        <div className="container-fluid">
+        <div className="container-fluid ">
           <Link to='#' className="navbar-brand mx-2">
-            <span className='p-5 mt-2'><img src='http://netzero.cmu.ac.th/web/wp-content/uploads/2023/05/logo-2-scaled-1.png' width={220} height={70}/></span>
+            <span className='p-5 mt-2'><img src='http://netzero.cmu.ac.th/web/wp-content/uploads/2023/05/logo-footer-300x88-1.png' width={220} height={70}/></span>
           </Link>
 
           <div className="d-flex justify-content-end">

@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { GoogleMap, useJsApiLoader, Marker, InfoWindow } from '@react-google-maps/api';
 
-function Map({ latitude, longitude, detail, setLatitude, setLongitude }) {
+function Map({ address,latitude, longitude, detail, setLatitude, setLongitude }) {
   const { isLoaded } = useJsApiLoader({
     id: 'google-map-script',
-    googleMapsApiKey: "AIzaSyBneyeBMWC910_H1sLEKGGlLSr894Tm1iY"
+    googleMapsApiKey: "AIzaSyA1_fhj9BM9toksnO1zW2R9ftUP46UPFvU"
   });
 
   const [markerPosition, setMarkerPosition] = useState({ lat: latitude, lng: longitude });
@@ -33,6 +33,7 @@ function Map({ latitude, longitude, detail, setLatitude, setLongitude }) {
         <InfoWindow position={markerPosition}>
           <div>
             <p>{detail}</p>
+            <p>{address}</p>
             <p>Latitude: {markerPosition.lat}</p>
             <p>Longitude: {markerPosition.lng}</p>
           </div>

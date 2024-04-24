@@ -4,15 +4,16 @@ import axios from "axios";
 import config from "../../config";
 import { useParams } from "react-router-dom";
 import Accordion from "../../components/Accordion";
-
+import DownloadForOfflineIcon from '@mui/icons-material/DownloadForOffline';
 function TabActivity() {
   const [activities, setActivities] = useState([]);
   const [quantities, setQuantities] = useState([]);
-
+  const [sourcesFiles,setSourFiles] = useState('');
+  const [exportSourcesFiles,setExportSourcesFiless] = useState([]);
   const { id } = useParams();
-
   useEffect(() => {
     fetchDataApi();
+    fetchExportFile();
   }, [id]);
 
   const fetchDataApi = async () => {
@@ -99,9 +100,73 @@ function TabActivity() {
       });
     }
   };
+
+  const handlerImportFile = async (e) => {
+    try {
+      e.preventDefault();
+      if (!sourcesFiles) { // ตรวจสอบว่ามีการเลือกไฟล์หรือไม่
+        await Swal.fire({
+          icon: 'warning',
+          title: 'เตือน!!',
+          text: 'กรุณาเพิ่มรูปภาพ'
+        });
+      } else {
+        const confirmation = await Swal.fire({
+          icon: 'info',
+          title: 'สร้างข้อมูล',
+          text: 'ต้องการสร้างรายงานใช่หรือไม่',
+          showCancelButton: true,
+        });
+        if (confirmation.isConfirmed) { // ถ้าผู้ใช้กดตกลง
+          await Swal.fire({
+            icon: 'success',
+            title: 'สำเร็จ',
+            text: 'ระบบทำการสร้างรายงานเรียบร้อยแล้ว',
+            showConfirmButton: false,
+            timer: 2000,
+            timerProgressBar: true,
+          });
+          const formData = new FormData();
+          formData.append('file_name', sourcesFiles);
+          formData.append('activityperiod_id', id);
+          const response = await axios.post(config.urlApi + `/importSourcesfile`, formData, {
+            headers: {
+              'Content-Type': 'multipart/form-data'
+            }
+          });
+          fetchExportFile();
+        }
+      }
+    } catch (e) {
+      console.log(e.message);
+    }
+  }
   
+
+  const fetchExportFile = async()=>{
+    try{
+      const response = await axios.get(config.urlApi + `/sourcesfile/${id}`);
+      setExportSourcesFiless(response.data);
+    }catch(e){
+      console.log(e.message);
+    }
+  }
+
+ const showDataPdf = (exportSourcesFile) =>{
+  Swal.fire({
+    icon:'question',
+    title:'เปิดไฟล์',
+    text:'ต้องการเปิดไฟล์ใช่หรือไม่',
+    showCancelButton:true
+  }).then(res =>{
+    if(res.isConfirmed){
+      window.open(`${config.urlApi}/sourcesfile/${exportSourcesFile}`,"_blank","noreferrer")
+    }
+  })
+ }
   return (
     <div>
+      <p className='h3'>กิจกรรมการปล่อยก๊าซเรือนกระจก</p>
       {activities.length === 0 ? (
         <p>Loading...</p>
       ) : (
@@ -232,6 +297,40 @@ function TabActivity() {
           </div>
         ))
       )}
+      <div className="card shadow text-center">
+  <div className="card-header text-white" style={{ background: 'linear-gradient(90deg, rgba(31,31,37,1) 0%, rgba(61,62,80,1) 50%, rgba(103,117,134,1) 100%)',marginTop:'auto' }}>
+    Uploads ไฟล์เอกสารหลักฐาน  ( maximum size: 2 MB )
+  </div>
+  <div className="card-body"  style={{ background: 'linear-gradient(90deg, rgba(31,31,37,1) 0%, rgba(61,62,80,1) 50%, rgba(103,117,134,1) 100%)',marginTop:'auto' }}>
+  <div className="mb-3">
+  {exportSourcesFiles.length === 0 ?
+  <p className="text-center text-white">ไม่มีหลักฐานข้อมูล</p>  
+  :
+<>
+    {exportSourcesFiles.map((exportSourcesFile, index) => (
+        <div key={index}>
+            <button className="btn btn-primary m-3" onClick={() => showDataPdf(exportSourcesFile.file_name)}>
+                <DownloadForOfflineIcon /> หลักฐาน
+            </button>
+            <span className="text-white">{exportSourcesFile.file_name}</span>
+            <hr className="text-white" />
+        </div>
+    ))}
+</>
+}
+<br/>
+
+  <div className="input-group">
+  <input type="file" className="form-control" onChange={(e) => setSourFiles(e.target.files[0])} id="inputGroupFile04" aria-describedby="inputGroupFileAddon04" accept="application/pdf" aria-label="Upload"/>
+  {sourcesFiles === '' ?   
+  <button className="btn btn-secondary" type="button" disabled id="inputGroupFileAddon04" onClick={handlerImportFile}>เพิ่มหลักฐาน</button> :  
+   <button className="btn btn-primary" type="button" id="inputGroupFileAddon04" onClick={handlerImportFile}>เพิ่มหลักฐาน</button> }
+
+
+</div>
+</div>
+  </div>
+</div>
     </div>
   );
 }

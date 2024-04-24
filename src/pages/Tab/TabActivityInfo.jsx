@@ -133,15 +133,17 @@ const onLoadDataActivity = async (event) => {
     <div>
       {infos.map((info, index) => (
         <div className="row" key={index}>
+            <p className='h2'>ข้อมูลทั่วไป</p>
           <div className="col-md-12">
             <div className="card">
               <div className="card-body">
-                <div className="row px-2">
+                <div className="row px-2ฃ">
                   <div className="col-md-6">
                     <div className="card border-0">
                       <div className="card-body">
                         <Map
                           detail={`วิทยาเขต ${info.campus.campus_name} หน่วยงาน ${info.faculty.fac_name}`}
+                          address={`ที่อยู่ ${info.faculty.address}`}
                           latitude={parseFloat(info.faculty.latitude)}
                           longitude={parseFloat(info.faculty.longitude)}
                           setLatitude={setLatitude}
@@ -209,6 +211,9 @@ const onLoadDataActivity = async (event) => {
           </div>
         </div>
       ))}
+
+  
+     
     </div>
   );
 }

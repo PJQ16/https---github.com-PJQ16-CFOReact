@@ -8,7 +8,7 @@ import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import "../node_modules/bootstrap/dist/css/bootstrap.min.css"
 import { UserDataProvider } from './components/MyContext'
 import NotFound from './pages/NotFound'
-
+import './index.css'
 
 function App() {
   return (

@@ -224,6 +224,7 @@ function TabActivityReport() {
   };
   return (
     <div>
+    <p className='h2'>รายงาน</p>
     {reportData.length === 0 && (
   <button
     className="btn btn-primary"
@@ -236,6 +237,7 @@ function TabActivityReport() {
 
 
       <div className="row">
+ 
         <div className="col-md-12 mt-5">
           <div className="card ">
             <div className="table-responsive">

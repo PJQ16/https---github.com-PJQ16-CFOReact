@@ -74,6 +74,7 @@ export default function TabActivitySummary() {
   return (
     <div>
       <div className='row'>
+      <p className='h2 ms-3'>สรุปผลการคำนวณ</p>
         <div className="col-md-5 m-3">
           <div className="card shadow border-0">
             <div className="card-body">

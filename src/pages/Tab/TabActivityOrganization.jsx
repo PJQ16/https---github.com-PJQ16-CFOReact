@@ -103,6 +103,7 @@ function TabActivityOrganization() {
 return (
   <div>
     <div className="row">
+    <p className='h2 text-center'>โครงสร้างองค์กร</p>
       <div className="col-md-12 d-flex justify-content-center">
         {showImages.length > 0 ? (
           showImages.map((image) => (
