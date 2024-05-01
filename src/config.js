@@ -1,5 +1,5 @@
 const config = {
-        urlApi:'http://localhost:3084',
+        urlApi:'http://10.110.23.11:3084',
         token_name:'pos_token',
         headers:() => {
                 return{

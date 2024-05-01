@@ -14,8 +14,8 @@ function App() {
   return (
     <UserDataProvider>
    <Routes>
-    <Route path='/' element={<Home/>}/>
     <Route path='/login' element={<Login/>}/>
+    <Route path='/' element={<Home/>}/>
     <Route path='/activitydata' element={<ActivityData/>}/>
     <Route path='/activityDetail/:fac_id/:years/:id' element={<ActivityDetail />} />
     <Route path='*' element={<NotFound/>} />

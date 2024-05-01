@@ -32,6 +32,7 @@
     "sweetalert2": "^11.10.6",
     "web-vitals": "^2.1.4"
   },
+  "homepage": "http://10.110.23.11/netzero-cmu-ghglandscape/",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
