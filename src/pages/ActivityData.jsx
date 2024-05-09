@@ -43,7 +43,11 @@ export default function Activitydata() {
         {dataPeriods.map((item)=>
             <div className="col-md-4 my-2" key={item.id}>
             <div className="card" style={{width:'18rem'}}>
+                {item.logo === ''?
                 <img src='https://media.istockphoto.com/id/1248723171/vector/camera-photo-upload-icon-on-isolated-white-background-eps-10-vector.jpg?s=612x612&w=0&k=20&c=e-OBJ2jbB-W_vfEwNCip4PW4DqhHGXYMtC3K_mzOac0=' className="card-img-top" alt="..." />
+                :
+                <img src={`${config.urlApi}/logos/${userData.logo}`} className="card-img-top" alt="..." />
+                }
                 <div className="card-body">
                     <h5 className="card-title">ปล่อยก๊าซเรือนกระจก {item.years + 543}</h5>
                     <p className="card-text">กิจกรรมการปล่อยก๊าซเรือนกระจก ของวิทยาเขต {userData.campusName} หน่วยงาน{userData.facultyName}</p>
