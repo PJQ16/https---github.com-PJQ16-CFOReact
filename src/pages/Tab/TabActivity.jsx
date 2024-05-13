@@ -212,12 +212,12 @@ function TabActivity() {
                   title={`${headIndex + 1}.) ${headCategory.head_name}`}
                   expanded={headCategory.id === 0}
                 >
-                  {headCategory.id === 11 ? (
+                  {headCategory.id === 11  || headCategory.id  === 30 || headCategory.id  === 31 || headCategory.id  === 32 || headCategory.id  === 33 ? (
                     <button
                       className="btn btn-success mb-2"
                       onClick={handdlerFuel}
                     >
-                      <CompareArrowsIcon /> ดึงข้อมูล
+                      <CompareArrowsIcon /> ซิงค์ข้อมูล
                     </button>
                   ) : (
                     <></>
@@ -271,7 +271,7 @@ function TabActivity() {
                                         );
                                       return (
                                         <td key={Thmonth.id}>
-                                          {data_scope.head_id === 11 ? (
+                                          {data_scope.head_id === 11  || data_scope.head_id  === 30 || data_scope.head_id  === 31 || data_scope.head_id  === 32 || data_scope.head_id  === 33 ? (
                                             <form>
                                               <input
                                                 type="number"
