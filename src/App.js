@@ -9,6 +9,7 @@ import "../node_modules/bootstrap/dist/css/bootstrap.min.css"
 import { UserDataProvider } from './components/MyContext'
 import NotFound from './pages/NotFound'
 import './index.css'
+import ForgotPassword from './pages/ForgotPassword'
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
     <Route path='/' element={<Home/>}/>
     <Route path='/activitydata' element={<ActivityData/>}/>
     <Route path='/activityDetail/:fac_id/:years/:id' element={<ActivityDetail />} />
+    <Route path='/forgot-password' element={<ForgotPassword />} />
     <Route path='*' element={<NotFound/>} />
    </Routes>
    </UserDataProvider>

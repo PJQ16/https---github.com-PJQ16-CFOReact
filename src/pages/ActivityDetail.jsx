@@ -25,7 +25,7 @@ function ActivityDetail() {
   return (
     <div>
       <Navbar />
-      <Layout>
+      <div className="row">
        <div className="p-5">
           <Tab>
             <div label="ข้อมูลทั่วไป">
@@ -48,7 +48,7 @@ function ActivityDetail() {
             </div>
           </Tab>
           </div>
-      </Layout>
+          </div>
       <Footer />
     </div>
   );

@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import {useNavigate } from 'react-router-dom';
+import {Link, useNavigate } from 'react-router-dom';
 import config from '../config';
 import axios from 'axios';
 import Swal from 'sweetalert2';
-import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
+import NavbarUnlock from '../components/NavbarUnlock';
 
 const Login = () => {
 
@@ -46,9 +46,9 @@ const Login = () => {
         } 
     } catch (e) {
         Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: e.message
+            icon: 'warning',
+            title: 'Warning',
+            text: 'ชื่อผู้ใช้งาน หรือ รหัสผ่านไม่ถูกต้อง ',
         })
     }
   }
@@ -70,16 +70,18 @@ const Login = () => {
   };
   return (
     <>
-    <Navbar/>
-    <div className="d-flex justify-content-center align-items-center vh-100" style={{ background: 'linear-gradient(90deg, rgba(31,31,37,1) 0%, rgba(61,62,80,1) 50%, rgba(103,117,134,1) 100%)' }}>
-      <div className="card shadow p-3 mb-5 bg-white rounded" style={{ width: '400px' }}>
+    <NavbarUnlock/>
+    <div className="d-flex justify-content-evenly align-items-center vh-100" style={{ backgroundImage: 'url("img/cover.jpeg")',backgroundSize: 'cover' }}
+>
+      <div className="card shadow-lg border-5 border-top-0 border-bottom-0 p-2 mb-1 bg-transparent rounded" style={{ width: '400px' }}>
         <div className="card-body">
-          <h3 className="card-title text-center mb-4">เข้าสู่ระบบ NetZero CMU</h3>
+        <h1 className="card-title text-white text-center mb-4">CMU</h1>
+          <h3 className="card-title text-white text-center mb-4">เข้าสู่ระบบ NetZero </h3>
             <div className="mb-3">
-              <label >Username</label>
+              <label className='text-white'>Username</label>
               <input
                 type='email'
-                className='form-control p-2 shadow-sm'
+                className='form-control p-3 shadow-sm'
                 placeholder='email@email.com'
                 onChange={(e)=>setEmail(e.target.value)}
                 onBlur={validateEmail}
@@ -87,23 +89,27 @@ const Login = () => {
                 {emailError && <p className='text-danger'>{emailError}</p>}
             </div>
             <div className="mb-3">
-              <label>Password</label>
+              <label className='text-white'>Password</label>
               <input
                 type='password'
                 required
-                className='form-control p-2 shadow-sm'
+                className='form-control p-3 shadow-sm'
                 placeholder='Password'
                 onChange={(e)=>setPassword(e.target.value)}
                 onBlur={validatePassword} 
               />
                {passwordError && <p className='text-danger'>{passwordError}</p>}
             </div>
-            {email && password !== ''? <button className='btn btn-secondary shadow-sm' onClick={handlerLogin}>
+            {email && password !== ''? <button className='btn btn-dark shadow-sm' onClick={handlerLogin}>
               <i className='fa-solid fa-right-to-bracket'></i> เข้าสู่ระบบ
               </button>
                 : <button className='btn btn-secondary shadow-sm' disabled>
                 <i className="fa-solid fa-lock"></i> เข้าสู่ระบบ
               </button> }
+             <Link to='/forgot-password'><button className='btn btn-secondary ms-2 shadow-sm'>
+                <i className="fa-solid fa-lock"></i> ลืมรหัสผ่าน
+              </button> 
+              </Link>
         </div>
       </div>
     </div>

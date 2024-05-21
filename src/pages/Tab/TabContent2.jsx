@@ -56,7 +56,7 @@ export default function TabContent2() {
   <div className="container">
     <h1 className="display-4">คาร์บอนฟุตพริ้นท์ในระดับองค์กร</h1>
     <h3 className='display-5'>(Carbon Footprint for Organization: CFO)</h3>
-    <p className="lead">คือ การประเมินปริมาณการปล่อยและดูดกลับก๊าซเรือนกระจกที่เกิดจากกิจกรรมต่าง ๆ ที่เกี่ยวข้องกับองค์กรในแต่ละปีทั้งทางตรงและทางอ้อม</p>
+    <p className="lead text-white" >คือ การประเมินปริมาณการปล่อยและดูดกลับก๊าซเรือนกระจกที่เกิดจากกิจกรรมต่าง ๆ ที่เกี่ยวข้องกับองค์กรในแต่ละปีทั้งทางตรงและทางอ้อม</p>
   </div>
 </div>
   

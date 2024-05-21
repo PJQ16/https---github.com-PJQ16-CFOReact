@@ -7,7 +7,7 @@ export default function TabContent1() {
     const Headcard = [
         {
            id:1,
-           img:'/img/scope1.png',
+           img:'img/scope1.png',
            title:'การปล่อยก๊าซเรือนกระจกทางตรง',
            detail:'การปล่อยก๊าซเรือนกระจกทางตรง (Direct Emissions) จากกิจกรรมต่าง ๆ ขององค์กรโดยตรง',
            moreinfo:[
@@ -16,7 +16,7 @@ export default function TabContent1() {
         },
         {
             id:2,
-            img:'/img/scope2.jpeg',
+            img:'img/scope2.jpeg',
            title:'การปล่อยก๊าซเรือนกระจกทางอ้อมจากการใช้พลังงาน',
            detail:'การปล่อยก๊าซเรือนกระจกทางอ้อมจากการใช้พลังงาน (Energy Indirect Emissions) ได้แก่ การซื้อพลังงานมาใช้ในองค์กร ได้แก่ พลังงานไฟฟ้า ความร้อน ความเย็น ไอน้ำ เป็นต้น',
            moreinfo:[
@@ -25,7 +25,7 @@ export default function TabContent1() {
         },
         {
             id:3,
-            img:'/img/scope3.png',
+            img:'img/scope3.png',
             title:'การปล่อยก๊าซเรือนกระจกทางอ้อมอื่น ๆ',
             detail:'ปริมาณก๊าซเรือนกระจกที่เกิดขึ้นจากกิจกรรมต่าง ๆ นอกเหนือจากที่ระบุในประเภทที่ 1 และประเภทที่ 2 เช่น การเดินทางของพนักงานด้วยพาหนะที่ไม่ใช่ขององค์กร การเดินทางไปสัมมนานอกสถานที่ เป็นต้น',
             moreinfo:[
@@ -34,7 +34,7 @@ export default function TabContent1() {
         },
         {
             id:4,
-            img:'/img/removal.png',
+            img:'img/removal.png',
            title:'การดูดกลับและกักเก็บก๊าซเรือนกระจก',
            detail:'การดูดกลับก๊าซเรือนกระจกที่อยู่ในชั้นบรรยากาศไปกักเก็บไว้ในแหล่งกักเก็บก๊าซเรือนกระจกทั้งทางชีวภาพ (Biological sinks) และทางวิศวกรรมเคมี (Chemical engineering) เพื่อดูดซับและกักเก็บในระยะยาว',
            moreinfo:[
@@ -49,7 +49,7 @@ export default function TabContent1() {
   <div className="container">
     <h1 className="display-4">คาร์บอนฟุตพริ้นท์ในระดับองค์กร</h1>
     <h3 className='display-5'>(Carbon Footprint for Organization: CFO)</h3>
-    <p className="lead">คือ การประเมินปริมาณการปล่อยและดูดกลับก๊าซเรือนกระจกที่เกิดจากกิจกรรมต่าง ๆ ที่เกี่ยวข้องกับองค์กรในแต่ละปีทั้งทางตรงและทางอ้อม</p>
+    <p className="lead text-white">คือ การประเมินปริมาณการปล่อยและดูดกลับก๊าซเรือนกระจกที่เกิดจากกิจกรรมต่าง ๆ ที่เกี่ยวข้องกับองค์กรในแต่ละปีทั้งทางตรงและทางอ้อม</p>
   </div>
 </div>
   

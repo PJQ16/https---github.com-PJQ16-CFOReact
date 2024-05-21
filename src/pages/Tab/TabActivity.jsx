@@ -11,6 +11,7 @@ function TabActivity() {
   const [quantities, setQuantities] = useState([]);
   const [sourcesFiles, setSourFiles] = useState("");
   const [exportSourcesFiles, setExportSourcesFiless] = useState([]);
+  const [countAvg, setCountAvg] = useState(null);
   const { id } = useParams();
   useEffect(() => {
     fetchDataApi();
@@ -23,6 +24,7 @@ function TabActivity() {
         ...activity,
         headcategories: activity.headcategories.sort((a, b) => a.id - b.id),
       }));
+
       setActivities(sortedActivities);
 
       // Initialize quantities array with default values
@@ -32,6 +34,9 @@ function TabActivity() {
         )
       );
       setQuantities(initialQuantities);
+
+      const response = await axios.get(config.urlApi + `/dividData/${id}`);
+      setCountAvg(response.data);
     } catch (err) {
       Swal.fire({
         icon: "error",
@@ -158,25 +163,21 @@ function TabActivity() {
   };
 
   const handdlerFuel = async () => {
-    try {    
-      Swal.fire(
-        {
-          icon:'success',
-          title:'สำเร็จ',
-          text:'ดึงข้อมูลสำเร็จ',
-          showConfirmButton:false,
-          timer:800,
-          timerProgressBar:true
-        }
-      )
-        await axios.put(config.urlApi + `/datascope/pullDataFuel/${id}`);
-        fetchDataApi();
-      
+    try {
+      Swal.fire({
+        icon: "success",
+        title: "สำเร็จ",
+        text: "ดึงข้อมูลสำเร็จ",
+        showConfirmButton: false,
+        timer: 800,
+        timerProgressBar: true,
+      });
+      await axios.put(config.urlApi + `/datascope/pullDataFuel/${id}`);
+      fetchDataApi();
     } catch (e) {
       console.log(e.message);
     }
   };
-  
 
   const showDataPdf = (exportSourcesFile) => {
     Swal.fire({
@@ -194,11 +195,16 @@ function TabActivity() {
       }
     });
   };
+
   return (
     <div>
       <p className="h3">กิจกรรมการปล่อยก๊าซเรือนกระจก</p>
       {activities.length === 0 ? (
-        <p>Loading...</p>
+        <div className="d-flex justify-content-center">
+          <div className="spinner-border" role="status">
+            <span className="sr-only">Loading...</span>
+          </div>
+        </div>
       ) : (
         activities.map((activity, activityIndex) => (
           <div key={activityIndex}>
@@ -212,7 +218,11 @@ function TabActivity() {
                   title={`${headIndex + 1}.) ${headCategory.head_name}`}
                   expanded={headCategory.id === 0}
                 >
-                  {headCategory.id === 11  || headCategory.id  === 30 || headCategory.id  === 31 || headCategory.id  === 32 || headCategory.id  === 33 ? (
+                  {headCategory.id === 11 ||
+                  headCategory.id === 30 ||
+                  headCategory.id === 31 ||
+                  headCategory.id === 32 ||
+                  headCategory.id === 33 ? (
                     <button
                       className="btn btn-success mb-2"
                       onClick={handdlerFuel}
@@ -271,7 +281,11 @@ function TabActivity() {
                                         );
                                       return (
                                         <td key={Thmonth.id}>
-                                          {data_scope.head_id === 11  || data_scope.head_id  === 30 || data_scope.head_id  === 31 || data_scope.head_id  === 32 || data_scope.head_id  === 33 ? (
+                                          {data_scope.head_id === 11 ||
+                                          data_scope.head_id === 30 ||
+                                          data_scope.head_id === 31 ||
+                                          data_scope.head_id === 32 ||
+                                          data_scope.head_id === 33 ? (
                                             <form>
                                               <input
                                                 type="number"
@@ -283,9 +297,7 @@ function TabActivity() {
                                                   padding: "5px",
                                                 }}
                                                 key={data_scope.id}
-                                                value={
-                                                quantityData.quantity  
-                                                }
+                                                value={quantityData.quantity}
                                               />
                                             </form>
                                           ) : (
@@ -324,15 +336,36 @@ function TabActivity() {
                                       );
                                     })}
                                     <td>
-                                      {parseFloat(totalYearQuantity).toFixed(2)}
+                                      {data_scope.name ===
+                                        "CH4 จากน้ำขังในพื้นที่นา" &&
+                                      countAvg !== null &&
+                                      countAvg !== 0
+                                        ? parseFloat(totalYearQuantity).toFixed(
+                                            2
+                                          ) / countAvg
+                                        : parseFloat(totalYearQuantity).toFixed(
+                                            2
+                                          )}
                                     </td>
                                     {activity.name === "scope1" ? (
                                       <td>
-                                        {(
-                                          parseFloat(
-                                            totalYearQuantity * data_scope.EF
-                                          ) / 1000
-                                        ).toFixed(2)}
+                                     {/* เงื่อนไขค้น จากชื่อ  เช็คค่า countAvg ไม่เท่ากับ  null และ 0 */}
+                                     {data_scope.name ===
+                                        "CH4 จากน้ำขังในพื้นที่นา" &&
+                                      countAvg !== null &&
+                                      countAvg !== 0
+                                        ? (
+                                              parseFloat(
+                                                (totalYearQuantity / countAvg) *
+                                                  data_scope.EF
+                                              ) / 1000
+                                            ).toFixed(2)
+                                          : (
+                                              parseFloat(
+                                                totalYearQuantity *
+                                                  data_scope.EF
+                                              ) / 1000
+                                            ).toFixed(2)}
                                       </td>
                                     ) : (
                                       <td>

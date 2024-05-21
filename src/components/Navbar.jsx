@@ -1,5 +1,5 @@
 import React, { useContext, useEffect } from 'react';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import axios from 'axios';
 import config from '../config';
@@ -8,7 +8,8 @@ import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import AspectRatioIcon from '@mui/icons-material/AspectRatio';
 import TransitEnterexitIcon from '@mui/icons-material/TransitEnterexit';
 
-function Navbar() {
+function Navbar({ imagePath }) {
+  const location = useLocation();
   const { userData, setUserData } = useContext(UserContext);
   const navigate = useNavigate();
   const { fac_id, years } = useParams();
@@ -78,12 +79,21 @@ function Navbar() {
 
   const isActivityDetailPage = fac_id && years;
 
+  const isActivityDetailPageImage = location.pathname.includes('/activityDetail');
+
+  // กำหนดตำแหน่งของรูปภาพโลโก้
+  let LOGO_IMAGE_PATH;
+  if (isActivityDetailPageImage) {
+    LOGO_IMAGE_PATH = '../../../img/logo.png';
+  } else {
+    LOGO_IMAGE_PATH = 'img/logo.png';
+  }
   return (
     <div>
       <nav className="navbar" style={{ background: 'linear-gradient(90deg, rgba(31,31,37,1) 0%, rgba(61,62,80,1) 50%, rgba(103,117,134,1) 100%)' }}>
         <div className="container-fluid ">
           <Link to='#' className="navbar-brand mx-2">
-            <span className='p-5 mt-2'><img src='/img/logo.png' width={220} height={70}/></span>
+            <span className='p-5 mt-2'><img src={LOGO_IMAGE_PATH} width={220} height={70}/></span>
           </Link>
 
           <div className="d-flex justify-content-end">
