@@ -36,7 +36,7 @@ function NavbarUnlock() {
 
   return (
     <div>
-      <nav className="navbar" style={{ background: 'linear-gradient(90deg, rgba(31,31,37,1) 0%, rgba(61,62,80,1) 50%, rgba(103,117,134,1) 100%)' }}>
+      <nav className="navbar" style={{ background: '#FFFFFF' }}>
         <div className="container-fluid ">
           <Link to='#' className="navbar-brand mx-2">
             <span className='p-5 mt-2'><img src='img/logo.png' width={220} height={70}/></span>
