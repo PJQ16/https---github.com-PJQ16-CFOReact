@@ -16,10 +16,10 @@ export default function Home() {
         <Sidebar />
         <Content>
           <Tab>
-            <div label="สำหรับการปล่อยก๊าซเรือนกระจก">
+            <div label="สำหรับข้อมูลทั่วไป">
                 <TabContent1/>
             </div>
-            <div label="สำหรับการกรอกข้อมูล">
+            <div label="สำหรับคำอธิบายกรอกข้อมูล">
                 <TabContent2/>
             </div>
           </Tab>

@@ -101,7 +101,7 @@ export default function Activitydata() {
                                     <div className="card-body">
                                         <h5 className="card-title">ปล่อยก๊าซเรือนกระจก {item.years + 543}</h5>
                                         <p className="card-text">กิจกรรมการปล่อยก๊าซเรือนกระจก ของวิทยาเขต {userData.campusName} หน่วยงาน {userData.facultyName}</p>
-                                        <Link to={`/activityDetail/${item.fac_id}/${item.years + 543}/${item.id}`} className="btn text-white" style={{ backgroundColor: '#043C7F' }}>
+                                        <Link to={`/activityDetail/${item.campus_id}/${item.fac_id}/${item.years + 543}/${item.id}`} className="btn text-white" style={{ backgroundColor: '#043C7F' }}>
                                             <ForestIcon style={{ color: 'white' }} /> กิจกรรม
                                         </Link>
                                     </div>

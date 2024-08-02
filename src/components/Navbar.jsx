@@ -84,7 +84,7 @@ function Navbar({ imagePath }) {
   // กำหนดตำแหน่งของรูปภาพโลโก้
   let LOGO_IMAGE_PATH;
   if (isActivityDetailPageImage) {
-    LOGO_IMAGE_PATH = '../../../img/logo.png';
+    LOGO_IMAGE_PATH = '../../../../img/logo.png';
   } else {
     LOGO_IMAGE_PATH = 'img/logo.png';
   }

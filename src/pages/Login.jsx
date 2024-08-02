@@ -71,14 +71,14 @@ const Login = () => {
   return (
     <>
     <NavbarUnlock/>
-    <div className="d-flex justify-content-evenly align-items-center vh-100" style={{ backgroundImage: 'url("img/cover.jpeg")',backgroundSize: 'cover' }}
+    <div className="d-flex justify-content-evenly align-items-center vh-100" style={{ backgroundImage: 'url("img/bg.jpg")',backgroundSize: 'cover' }}
 >
-      <div className="card shadow-lg border-5 border-top-0 border-bottom-0 p-2 mb-1 bg-transparent rounded" style={{ width: '400px' }}>
+      <div className="card shadow border-top-0 border-bottom-0 p-2 mb-1 rounded" style={{ width: '400px' }}>
         <div className="card-body">
-        <h1 className="card-title text-white text-center mb-4">CMU</h1>
-          <h3 className="card-title text-white text-center mb-4">เข้าสู่ระบบ NetZero </h3>
+        <h1 className="card-title  text-center mb-4">CMU</h1>
+          <h3 className="card-title  text-center mb-4">เข้าสู่ระบบ NetZero </h3>
             <div className="mb-3">
-              <label className='text-white'>Username</label>
+              <label className=''>Username</label>
               <input
                 type='email'
                 className='form-control p-3 shadow-sm'
@@ -89,7 +89,7 @@ const Login = () => {
                 {emailError && <p className='text-danger'>{emailError}</p>}
             </div>
             <div className="mb-3">
-              <label className='text-white'>Password</label>
+              <label className=''>Password</label>
               <input
                 type='password'
                 required

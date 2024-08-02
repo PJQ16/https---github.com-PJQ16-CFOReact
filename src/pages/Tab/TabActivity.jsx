@@ -13,6 +13,7 @@ function TabActivity() {
   const [exportSourcesFiles, setExportSourcesFiless] = useState([]);
   const [countAvg, setCountAvg] = useState(null);
   const { id } = useParams();
+  const [value, setValue] = useState(0);
   useEffect(() => {
     fetchDataApi();
     fetchExportFile();
@@ -219,6 +220,7 @@ function TabActivity() {
                   expanded={headCategory.id === 0}
                 >
                   {headCategory.id === 11 ||
+                    headCategory.id === 21 ||
                   headCategory.id === 30 ||
                   headCategory.id === 31 ||
                   headCategory.id === 32 ||
@@ -263,7 +265,7 @@ function TabActivity() {
                               .filter((item) => item.name === data_scope.name)
                               .reduce(
                                 (total, item) =>
-                                  total + parseFloat(item.quantity),
+                                  parseFloat(total) + parseFloat(item.quantity),
                                 0
                               );
                             return (
@@ -282,6 +284,7 @@ function TabActivity() {
                                       return (
                                         <td key={Thmonth.id}>
                                           {data_scope.head_id === 11 ||
+                                          data_scope.head_id === 21 ||
                                           data_scope.head_id === 30 ||
                                           data_scope.head_id === 31 ||
                                           data_scope.head_id === 32 ||
@@ -336,7 +339,13 @@ function TabActivity() {
                                       );
                                     })}
                                     <td>
-                                      {data_scope.name ===
+                                    {
+  data_scope.name === "CH4 จากน้ำขังในพื้นที่นา" && countAvg !== null && countAvg !== 0
+    ? Number((parseFloat(totalYearQuantity) / countAvg).toFixed(2)).toLocaleString()
+    : Number(parseFloat(totalYearQuantity).toFixed(2)).toLocaleString()
+}
+
+                                     {/*  {data_scope.name ===
                                         "CH4 จากน้ำขังในพื้นที่นา" &&
                                       countAvg !== null &&
                                       countAvg !== 0
@@ -345,7 +354,7 @@ function TabActivity() {
                                           ) / countAvg
                                         : parseFloat(totalYearQuantity).toFixed(
                                             2
-                                          )}
+                                          )} */}
                                     </td>
                                     {activity.name === "scope1" ? (
                                       <td>
@@ -355,26 +364,26 @@ function TabActivity() {
                                       countAvg !== null &&
                                       countAvg !== 0
                                         ? (
-                                              parseFloat(
+                                              Number(parseFloat(
                                                 (totalYearQuantity / countAvg) *
                                                   data_scope.EF
                                               ) / 1000
-                                            ).toFixed(2)
+                                            ).toFixed(2)).toLocaleString()
                                           : (
-                                              parseFloat(
+                                            Number(parseFloat(
                                                 totalYearQuantity *
                                                   data_scope.EF
                                               ) / 1000
-                                            ).toFixed(2)}
+                                            ).toFixed(2)).toLocaleString()}
                                       </td>
                                     ) : (
                                       <td>
                                         {(
-                                          parseFloat(
+                                           Number(parseFloat(
                                             totalYearQuantity *
                                               data_scope.kgCO2e
                                           ) / 1000
-                                        ).toFixed(2)}
+                                        ).toFixed(2)).toLocaleString()}
                                       </td>
                                     )}
                                   </tr>

@@ -3,6 +3,8 @@ import Swal from 'sweetalert2';
 import axios from 'axios';
 import config from '../../config';
 import { useParams } from 'react-router-dom';
+import DeleteIcon from '@mui/icons-material/Delete';
+import ModeEditIcon from '@mui/icons-material/ModeEdit';
 
 function TabActivityOrganization() {
   const [imageLocations, setImageLocations] = useState([]);
@@ -98,16 +100,60 @@ function TabActivityOrganization() {
     } 
 };
 
+const handleRemoveImg = async (imgId) => {
+  const result = await Swal.fire({
+    icon: "warning",
+    title: "โปรดยืนยันการลบ",
+    input: 'text',
+    inputPlaceholder: 'ยืนยันพิมคำว่า YES',
+    inputAttributes: {
+      pattern: '^[Yy][Ee][Ss]$',
+      maxlength: 3
+    },
+    confirmButtonColor: "#7a3",
+    confirmButtonText: "Submit",
+    showCancelButton: true,
+    cancelButtonColor: "#b45e",
+    cancelButtonText: "Cancel",
+    inputValidator: (value) => {
+      if (!value || !value.match(/^[Yy][Ee][Ss]$/)) {
+        return 'Please enter the correct value (YES).';
+      }
+    }
+  });
+
+  if (result.isConfirmed) {
+    try {
+      await axios.delete(config.urlApi + `/uploadImages/${imgId}`);
+      await Swal.fire({
+        icon: "success",
+        title: "ลบข้อมูลสำเร็จ",
+        timer: 800,
+        timerProgressBar: true
+      });
+      fetchImages();
+      // คุณอาจต้องการทำการอัปเดต state เพื่อลบรูปภาพออกจากหน้าจอ
+    } catch (error) {
+      await Swal.fire({
+        icon: "error",
+        title: "เกิดข้อผิดพลาด",
+        text: error.message,
+      });
+    }
+  }
+};
+
 
 
 return (
   <div>
     <div className="row">
     <p className='h2 text-center'>โครงสร้างองค์กร</p>
-      <div className="col-md-12 d-flex justify-content-center">
+      <div className="col-md-12 d-flex flex-column justify-content-center">
         {showImages.length > 0 ? (
           showImages.map((image) => (
             <div key={image.id}>
+                <button className="btn btn-danger rounded-circle mt-2" onClick={() =>handleRemoveImg(image.id)}><DeleteIcon/></button>
              <div className="card">
             <div className="card-body d-flex justify-content-center align-items-center flex-wrap">
             <label htmlFor="fileInput">

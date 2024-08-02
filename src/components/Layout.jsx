@@ -2,7 +2,7 @@ import React from 'react'
 
 function Layout(props) {
   return (
-    <div className="d-flex flex-wrap" style={{ backgroundImage: 'url("img/cover.jpeg")',backgroundSize: 'cover' }}
+    <div className="d-flex flex-wrap" style={{ backgroundImage: 'url("img/bg.jpg")',backgroundSize: 'cover' }}
     >
         {props.children}
     </div>

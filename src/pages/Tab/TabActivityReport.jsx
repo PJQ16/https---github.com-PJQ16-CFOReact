@@ -16,19 +16,19 @@ function TabActivityReport() {
   const [tester, setTester] = useState("");
   const [coordinator, setCoodinator] = useState("");
   const [responsible, setResponsible] = useState("");
-  const [monitor, setMonitor] = useState("");
-  const [assurance, setAssurance] = useState("");
-  const [materially, setMaterially] = useState("");
+  const [utility, setUtility] = useState("");
+  const [confirmDoc, setConfirmDoc] = useState("");
   const [explanation, setExplanation] = useState("");
-  const [cfo, setCFO] = useState("");
   const [cfoMore, setCFOMore] = useState("");
-  const [cfo3, setCFO3] = useState('');
+  const [facility,setFacility] = useState("");
   const [showOtherInput, setShowOtherInput] = useState(false); // สร้าง state เพื่อเก็บค่าว่าให้แสดง input "อื่นๆ" หรือไม่
   const [selectedOption, setSelectedOption] = useState(""); // เพิ่ม state เพื่อเก็บค่ารายการที่ถูกเลือก
   const [selectedImage, setSelectedImage] = useState(null); // เพิ่ม state เพื่อเก็บรูปภาพที่ถูกเลือก
+  const [ogImage, setOgImage] = useState(null); 
 
 
-  const { id } = useParams();
+
+  const { campus_id,id,years,fac_id } = useParams();
 
   useEffect(()=>{
     fetchData();
@@ -47,18 +47,6 @@ function TabActivityReport() {
     }
   }
 
-  const handleRadioChange = (e) => {
-    const selectedValue = e.target.value; // Get the selected value from the radio button
-    setSelectedOption(selectedValue); // Update the selectedOption state
-  
-    if (selectedValue === 'other') {
-      setShowOtherInput(true); // Show the input field for "other"
-      setCFO3(''); // Reset cfo3 when "other" is selected
-    } else {
-      setShowOtherInput(false); // Hide the input field for "other"
-      setCFO3(selectedValue); // Update the cfo3 state with the selected value
-    }
-  };
 
   const handleQuillChange = (value, setter) => {
     setter(value);
@@ -68,7 +56,7 @@ function TabActivityReport() {
     try {
       e.preventDefault();
 
-       if(intro === '' ||  tester === ''  || coordinator === '' || responsible === '' || monitor === '' || assurance === '' ||  materially === ''|| explanation === '' || cfo === '' || cfoMore === '' || cfo3 === '' || selectedImage === '' ){
+       if(intro === '' ||  tester === ''  || coordinator === '' || responsible === '' || utility === '' || confirmDoc === '' ||  explanation === '' || facility === '' || cfoMore === '' || selectedImage === '' || ogImage === '' ){
         Swal.fire
         (
           {
@@ -86,14 +74,13 @@ function TabActivityReport() {
       formData.append('tester', tester);
       formData.append('coordinator', coordinator);
       formData.append('responsible', responsible);
-      formData.append('monitor', monitor);
-      formData.append('assurance', assurance);
-      formData.append('materially', materially);
+      formData.append('utility', utility);
+      formData.append('facility', facility);
+      formData.append('confirmDoc', confirmDoc);
       formData.append('explanation', explanation);
-      formData.append('cfo_operation1', cfo);
       formData.append('cfo_operation2', cfoMore);
-      formData.append('cfo_operation3', cfo3);
       formData.append('image_name', selectedImage);
+      formData.append('image_og', ogImage);
   
       await Swal.fire({
         icon: 'info',
@@ -197,7 +184,9 @@ function TabActivityReport() {
         cancelButtonColor:'#B84343'
       });
       if(result.isConfirmed){
-    axios.get(config.urlApi + '/generate-pdf', { responseType: 'blob' })
+    axios.get(config.urlApi + `/generate-pdf/${campus_id}/${fac_id}/${years}/${id}`, {
+      responseType: 'blob' // รับข้อมูลประเภท blob เช่น ไฟล์ PDF
+    })
       .then(response => {
         // สร้าง URL จาก Blob
         const file = new Blob([response.data], { type: 'application/pdf' });
@@ -209,7 +198,7 @@ function TabActivityReport() {
         icon: 'success',
         title: 'ดาวน์โหลดสำเร็จ',
         showConfirmButton: false,
-        timer: 1500,
+        timer: 700,
         timerProgressBar:true
       });
 
@@ -222,6 +211,51 @@ function TabActivityReport() {
       });
     }
   };
+
+  const handleRemovalReport = async(ReportId) =>{
+    const result = await Swal.fire({
+      icon: "warning",
+      title: "โปรดยืนยันการลบ",
+      input: 'text',
+      inputPlaceholder: 'ยืนยันพิมคำว่า YES',
+      inputAttributes: {
+        pattern: '^[Yy][Ee][Ss]$',
+        maxlength: 3
+      },
+      confirmButtonColor: "#7a3",
+      confirmButtonText: "Submit",
+      showCancelButton: true,
+      cancelButtonColor: "#b45e",
+      cancelButtonText: "Cancel",
+      inputValidator: (value) => {
+        if (!value || !value.match(/^[Yy][Ee][Ss]$/)) {
+          return 'Please enter the correct value (YES).';
+        }
+      }
+    });
+  
+    if (result.isConfirmed) {
+      try {
+        await axios.delete(`${config.urlApi}/removeReport/${ReportId}`);
+        await Swal.fire({
+          icon: "success",
+          title: "ลบข้อมูลสำเร็จ",
+          timer: 800,
+          timerProgressBar: true
+        });
+        fetchData();
+        // คุณอาจต้องการทำการอัปเดต state เพื่อลบรูปภาพออกจากหน้าจอ
+      } catch (error) {
+        await Swal.fire({
+          icon: "error",
+          title: "เกิดข้อผิดพลาด",
+          text: error.message,
+        });
+      }
+    }
+  }
+
+  
   return (
     <div>
     <p className='h2'>รายงาน</p>
@@ -245,8 +279,8 @@ function TabActivityReport() {
                 <thead>
                   <tr className="text-center">
                     <th>วันที่ออกรายงาน</th>
-                    <th>รานงาย PDF</th>
-                    <th>รานงาย Excel</th>
+                    <th>รานงาน PDF</th>
+                    <th>รานงา Excel</th>
                     <th>ลบรายงาน</th>
                   </tr>
                 </thead>
@@ -266,7 +300,7 @@ function TabActivityReport() {
                       </button>
                     </td>
                     <td>
-                      <button className="btn  btn-lg btn-danger">
+                      <button className="btn  btn-lg btn-danger" onClick={(e) => handleRemovalReport(data.id)}>
                         <DeleteIcon fontSize="large" /> ลบ
                       </button>
                     </td>
@@ -301,6 +335,7 @@ function TabActivityReport() {
             <div className="modal-body">
               <div className="row">
               <div>
+              <div className="h3 fw-cold ">รูปรายงาน</div>
               <input 
   type="file" 
   className="form-control" 
@@ -315,17 +350,17 @@ function TabActivityReport() {
 )}
         </div>
 
-                <label>บทนำ</label>
+        <div className="h3 fw-cold ">บทนำ</div>
                 <ReactQuill
                   theme="snow"
                   value={intro}
                   style={{ height: "200px", marginBottom: "50px" }}
                   onChange={(value) => handleQuillChange(value, setIntro)}
                 />
-
-                <div className="col-md-5 m-3 px-5">
+            <div className="h3 fw-cold ">ข้อมูลทั่วไป</div>
+                <div className="col-md-12 m-3 px-5">
                   <label>
-                    หน่วยงานทดสอบ <sup style={{ color: "red" }}>*</sup>
+                   หน่วยงานทวนสอบ
                   </label>
                   <input
                     type="text"
@@ -334,10 +369,10 @@ function TabActivityReport() {
                   />
                 </div>
 
-                <div className="col-md-5 m-3 px-5">
+                <div className="col-md-12 m-3 px-5">
                   <label>
                     ชื่อ-สกุลของผู้ประสานงาน{" "}
-                    <sup style={{ color: "red" }}>*</sup>
+                  
                   </label>
                   <input
                     type="text"
@@ -346,10 +381,10 @@ function TabActivityReport() {
                   />
                 </div>
 
-                <div className="col-md-5 m-3 px-5">
+                <div className="col-md-12 m-3 px-5">
                   <label>
                     ชื่อ-สกุลของผู้รับผิดชอบ{" "}
-                    <sup style={{ color: "red" }}>*</sup>
+                    
                   </label>
                   <input
                     type="text"
@@ -357,44 +392,29 @@ function TabActivityReport() {
                     className="form-control"
                   />
                 </div>
-
-                <div className="col-md-5 m-3 px-5">
-                  <label>
-                    แนวทางที่ใช้ในการติดตามผล{" "}
-                    <sup style={{ color: "red" }}>*</sup>
-                  </label>
-                  <input
+                
+                <div className="h3 fw-cold ">ขอบเขตขององค์กร</div>
+                <div className="col-md-6">
+                  <label>หน่วยสาธารณูปโภค</label>
+                <input
                     type="text"
-                    onChange={(e) => setMonitor(e.target.value)}
+                    onChange={(e) => setUtility(e.target.value)}
                     className="form-control"
                   />
-                </div>
+                 
+                  </div>
 
-                <div className="col-md-5 m-3 px-5">
-                  <label>
-                    ระดับของการรับรอง <sup style={{ color: "red" }}>*</sup>
-                  </label>
+                  <div className="col-md-6">
+                  <label>เอกสารยืนยันขอบเขต</label>
                   <input
                     type="text"
-                    onChange={(e) => setAssurance(e.target.value)}
+                    onChange={(e) => setConfirmDoc(e.target.value)}
                     className="form-control"
                   />
-                </div>
-
-                <div className="col-md-5 m-3 px-5">
-                  <label>
-                    ระดับความมีสาระสำคัญ <sup style={{ color: "red" }}>*</sup>
-                  </label>
-                  <input
-                    type="text"
-                    onChange={(e) => setMaterially(e.target.value)}
-                    className="form-control"
-                  />
-                </div>
+                 </div>
               </div>
               <label>
                 แผนผังการดำเนินงาน( อธิบาย ){" "}
-                <sup style={{ color: "red" }}>*</sup>
               </label>
               <ReactQuill
                 theme="snow"
@@ -402,20 +422,17 @@ function TabActivityReport() {
                 style={{ height: "200px", marginBottom: "50px" }}
                 onChange={(value) => handleQuillChange(value, setExplanation)}
               />
+              <label>รูปแผนผังการดำเนินงาน</label>
+              <input 
+  type="file" 
+  className="form-control" 
+  accept=".jpg, .png, .jpeg" 
+  onChange={(e) =>  setOgImage(e.target.files[0])} 
+/>
 
+      <div className="h3 fw-cold ">ขอบเขตการดำเนินงาน</div> 
               <label>
-                1.ก๊าซเรือนกระจกที่พิจารณา <sup style={{ color: "red" }}>*</sup>
-              </label>
-              <ReactQuill
-                theme="snow"
-                value={cfo}
-                style={{ height: "200px", marginBottom: "50px" }}
-                onChange={(value) => handleQuillChange(value, setCFO)}
-              />
-
-              <label>
-                2.ก๊าซเรือนกระจกที่พิจารณาอื่น ๆเพิ่มเติม{" "}
-                <sup style={{ color: "red" }}>*</sup>
+                1.ก๊าซเรือนกระจกที่พิจารณาอื่น ๆเพิ่มเติม{" "}
               </label>
               <ReactQuill
                 theme="snow"
@@ -424,50 +441,15 @@ function TabActivityReport() {
                 onChange={(value) => handleQuillChange(value, setCFOMore)}
               />
 
-              <div className="form-check">
-                <input
-                  className="form-check-input"
-                  type="radio"
-                  name="flexRadioDisabled"
-                  id="flexRadioDisabled"
-                  checked={selectedOption === "ipcc"}
-                  onChange={handleRadioChange}
-                  value="ipcc"
-                />
-                <label className="form-check-label" htmlFor="flexRadioDisabled">
-                  IPCC Fifth Assessment Report (AR5)
-                </label>
-              </div>
-              <div className="form-check">
-                <input
-                  className="form-check-input"
-                  type="radio"
-                  name="flexRadioDisabled"
-                  id="flexRadioCheckedDisabled"
-                  onChange={handleRadioChange}
-                  value="other"
-                />
-                <label
-                  className="form-check-label"
-                  htmlFor="flexRadioCheckedDisabled"
-                >
-                  อื่นๆ
-                </label>
-              </div>
-              {showOtherInput && (
-                <div className="col-md-5">
-                  {showOtherInput && (
-  <div className="col-md-5">
-    <input 
-      type="text"
-      value={cfo3} 
-      onChange={(e) => setCFO3(e.target.value)} 
-      className="form-control" 
-    />
-  </div>
-)}
-                </div>
-              )}
+
+<label>2.ระบุขอบเขตขององค์กรที่เพิ่มเข้ามาหรือขอบเขตที่ไม่รวม (ระบุ Facility) ที่เพิ่มเข้ามาหรือไม่นับรวม พร้อมเหตุผล</label>
+              <ReactQuill
+                theme="snow"
+                value={facility}
+                style={{ height: "200px", marginBottom: "50px" }}
+                onChange={(value) => handleQuillChange(value, setFacility)}
+              />
+
             </div>
             <div className="modal-footer">
               <button
