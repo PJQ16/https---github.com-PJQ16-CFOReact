@@ -72,7 +72,7 @@ function TabActivityLocation() {
       const res = await Swal.fire({
         icon: 'question',
         title: 'เพิ่มรูป',
-        text: 'คุณต้องการเพิ่มรูปไหมครับ',
+        text: 'คุณต้องการเพิ่มรูปใช่หรือไม่',
         showCancelButton: true
       });
 
@@ -80,7 +80,7 @@ function TabActivityLocation() {
         await Swal.fire({
           icon: 'success',
           title: 'สำเร็จ',
-          text: 'เพิ่มข้อมูลสำรเร็จ',
+          text: 'บันทึกสำเร็จ"',
           timer: 1500,
           timerProgressBar: true
         });

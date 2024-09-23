@@ -41,9 +41,10 @@ function PieCenterLabel({ children }) {
 }
 
 export default function TabActivitySummary() {
-  const { years, id } = useParams();
+  const { years, id,fac_id } = useParams();
   const [scopeData, setScopeData] = useState([]);
   const [totalValue, setTotalValue] = useState(0);
+  const [infos, setInfos] = useState([]);
 
   useEffect(() => {
     fetchDataScope();
@@ -116,6 +117,24 @@ export default function TabActivitySummary() {
 
   const tco2eValues = data.map(item => parseFloat(item.tco2e).toFixed(2));
   const labels = data.map(item => item.name);
+  
+  useEffect(() => {
+    fetchDataInfo();
+  }, []);
+
+  const fetchDataInfo = async () => {
+    try {
+      const res = await axios.get(config.urlApi + `/activity/showPeriod/${fac_id}/${years - 543}`);
+      setInfos(res.data);
+    } catch (e) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: e.message
+      });
+    }
+  };
+
 
   return (
     <div>
@@ -220,8 +239,72 @@ export default function TabActivitySummary() {
                         <td>-</td>
                         <td>100</td>
                       </tr>
+                     
                     </tbody>
                   </table>
+
+                  <div className="table-responsive">
+                   <table className="table table-bordered">
+                   <tr className="alert-success">
+                        <td>Carbon intensity <br/>(Scope 1 + Scope 2)</td>
+                        <td>
+                        {infos.length > 0 && infos[0].employee_amount > 0 
+                          ? (scopeData.reduce((acc, item) => {
+                              if (item.name === "scope1" || item.name === "scope2") {
+                                return acc + parseFloat(item.tco2e);
+                              }
+                              return acc;
+                            }, 0) / parseFloat(infos[0].building_area)).toFixed(2)
+                          : "N/A"}
+                      </td>
+                        <td>TonCO2eq/m<sup>2</sup></td>
+                        <td>
+                          {infos.length > 0 && infos[0].employee_amount > 0 
+                            ? (scopeData.reduce((acc, item) => {
+                                if (item.name === "scope1" || item.name === "scope2") {
+                                  return acc + parseFloat(item.tco2e);
+                                }
+                                return acc;
+                             
+                            }, 0) / parseFloat(infos[0].employee_amount)).toFixed(2)
+                            : "N/A"}
+                        </td>
+
+                        <td>TonCO2eq/People</td>
+                      </tr>
+                      <tr className="alert-success">
+                      <td>Carbon intensity <br/> (Scope 1 + Scope 2 + Scope 3)</td>
+                        <td>{infos.length > 0 && infos[0].employee_amount > 0
+                        ?(scopeData.reduce((acc, item) => {
+                              if (
+                                item.name === "scope1" ||
+                                item.name === "scope2" ||
+                                item.name === "scope3"
+                              ) {
+                                return acc + parseFloat(item.tco2e);
+                              }
+                              return acc;
+                            }, 0) / parseFloat(infos[0].building_area)).toFixed(2)
+                            : "N/A"}
+                        </td>
+                        <td>TonCO2eq/m<sup>2</sup></td>
+                        <td>{infos.length > 0 && infos[0].employee_amount > 0
+                        ?(scopeData.reduce((acc, item) => {
+                              if (
+                                item.name === "scope1" ||
+                                item.name === "scope2" ||
+                                item.name === "scope3"
+                              ) {
+                                return acc + parseFloat(item.tco2e);
+                              }
+                              return acc;
+                            }, 0) / parseFloat(infos[0].employee_amount)).toFixed(2)
+                            : "N/A"}
+                        </td>
+                        <td>TonCO2eq/People</td>
+                      </tr>
+                  </table>
+                  </div>
                   </div>
             </div>
             </div>

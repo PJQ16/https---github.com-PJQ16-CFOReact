@@ -57,7 +57,7 @@ export default function Aside() {
 
       useEffect(()=>{
         fetchData();
-      },[measure])
+      },[])
   
   return (
     <aside className="app-sidebar">
