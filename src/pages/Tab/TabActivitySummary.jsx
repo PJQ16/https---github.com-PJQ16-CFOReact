@@ -102,106 +102,60 @@ export default function TabActivitySummary() {
     ),
   }));
 
-  const colors = [
-    "#0E3B43", "#357266", "#A3BBAD", "#65532F", "#312509",
-];
+  const colorCharts = [
+    "#C89AF2", "#EFCEE5", "#FBEDD4", "#D7F3EA", "#B6E5E1",
+  ];
 
-const data = scopeData.map((item, index) => ({
+  
+  const data = scopeData.map((item, index) => ({
     years: item.years,
     tco2e: item.tco2e,
     name: item.name,
-}));
+    colors:colorCharts[index+1]
+  }));
 
-const tco2eValues = data.map(item => parseFloat(item.tco2e).toFixed(2));
-const labels = data.map(item => item.name);
+  const tco2eValues = data.map(item => parseFloat(item.tco2e).toFixed(2));
+  const labels = data.map(item => item.name);
 
   return (
     <div>
+       <p className="h2 ms-3">สรุปผลการคำนวณ</p>
       <div className="row">
-        <p className="h2 ms-3">สรุปผลการคำนวณ</p>
-        <div className="d-flex flex-row justify-content-evenly">
-          <div className="d-flex  flex-column">
-            <div className="col-md-12 p-3">
-              <div className="card shadow border-0">
-                <div className="card-body ">
-                <BarChart
-    width={500}
-    height={400}
-    series={[
-        {
-            data: tco2eValues,
-            label: 'tCO2e',
-            id: 'tco2eId'
-        }
-    ]}
-    xAxis={[{ data: labels, scaleType: 'band' }]}
-/>
-                </div>
-              </div>
-            </div>
-
-            <div className="col-md-12 p-3 w-100">
-              <div className="card shadow border-0">
+       
+            <div className="col-md-6 p-3">
+              <div className="">
                 <div className="card-body">
-                  <StyledPieChart
-                    margin={{ top: 50, bottom: 50, left: 50, right: 50 }}
-                    slotProps={{
-                      legend: {
-                        direction: "row",
-                        position: { vertical: "top", horizontal: "middle" },
-                        padding: 0,
-                      },
-                    }}
-                    series={[
-                      {
-                        data: scopeData.map((item) => ({
-                          id: item.id,
-                          value: parseFloat(item.tco2e),
-                          label: item.name,
-                        })),
-                        arcLabel: (item) => {
-                          const percentage = percentages.find(
-                            (p) => p.label === item.label
-                          )?.percentage;
-                          return isNaN(parseFloat(percentage))
-                            ? ""
-                            : `${percentage} %`;
-                        },
-                        highlightScope: {
-                          faded: "global",
-                          highlighted: "item",
-                        },
-                        faded: {
-                          innerRadius: 30,
-                          additionalRadius: -30,
-                          color: "gray",
-                        },
-                        innerRadius: 100,
-                        outerRadius: 180,
-                        paddingAngle: 3,
-                        cornerRadius: 10,
-                        endAngle: 360,
-                      },
-                    ]}
-                  >
-                    <PieCenterLabel>ผลการคำนวณ ปี {years} </PieCenterLabel>
-                  </StyledPieChart>
+                  
+                <BarChart
+                width={500}
+                height={400}
+                series={[
+                  {
+                    data: tco2eValues,
+                    label: 'tCO2e',
+                    id: 'tco2eId',
+                    color: '#C89AF2' // This might be overridden by slotProps
+                  }
+                ]}
+                xAxis={[{ data: labels, scaleType: 'band' }]}
+              />
+                  
+                  
+                
                 </div>
               </div>
             </div>
-          </div>
-
-          <div className="col-md-6 m-3">
-            <div className="card border-0 shadow">
-              <div className="card-body">
-                <div className="table-responsive">
-                  <table className="table table-bordered table-striped table-hover vh-100">
+            
+            <div className="col-md-6 p-3">
+            <div className="card-body">
+            <div className="table-responsive">
+            <table className="table table-striped ">
                     <thead>
                       <tr className="text-center">
-                        <th>ขอบเขต</th>
-                        <th>Organization Greenhouse Gas Emissions</th>
-                        <th>Ratio Scope 1 and 2</th>
-                        <th>Ratio Scope 1 and 2 3</th>
+                        <th className="text-white" style={{backgroundColor:'#473c98'}}>ขอบเขต</th>
+                        <th className="text-white" style={{backgroundColor:'#473c98'}}>Organization Greenhouse Gas Emissions</th>
+                        <th className="text-white" style={{backgroundColor:'#473c98'}}>Ratio Scope 1 and 2</th>
+                        <th className="text-white" style={{backgroundColor:'#473c98'}}>Ratio Scope 1 and 2 3</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -268,12 +222,62 @@ const labels = data.map(item => item.name);
                       </tr>
                     </tbody>
                   </table>
+                  </div>
+            </div>
+            </div>
+
+            <div className="col-md-6 p-3">
+              <div className="">
+                <div className="card-body">
+                  <StyledPieChart
+                    margin={{ top: 50, bottom: 50, left: 50, right: 50 }}
+                    series={[
+                      {
+                        data: scopeData.map((item, index) => ({
+                          id: item.id,
+                          value: parseFloat(item.tco2e),
+                          label: item.name,
+                          color: colorCharts[index % colorCharts.length],  // Set color for each pie slice
+                        })),
+                        arcLabel: (item) => {
+                          const percentage = percentages.find(
+                            (p) => p.label === item.label
+                          )?.percentage;
+                          return isNaN(parseFloat(percentage))
+                            ? ""
+                            : `${percentage} %`;
+                        },
+                        highlightScope: {
+                          faded: "global",
+                          highlighted: "item",
+                        },
+                        faded: {
+                          innerRadius: 30,
+                          additionalRadius: -30,
+                          color: "gray",
+                        },
+                        innerRadius: 100,
+                        outerRadius: 180,
+                        paddingAngle: 3,
+                        cornerRadius: 10,
+                        endAngle: 360,
+                      },
+                    ]}
+                    slotProps={{
+                      legend: {
+                        direction: 'row',
+                        position: { vertical: "top", horizontal: "middle" },
+                        padding: 0,
+                      },
+                    }}
+                  >
+                    <PieCenterLabel>ผลการคำนวณ ปี {years} </PieCenterLabel>
+                  </StyledPieChart>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-    </div>
+
   );
 }

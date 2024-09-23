@@ -197,6 +197,23 @@ function TabActivity() {
     });
   };
 
+  const getBadgeClass = (name) => {
+    switch (name) {
+        case 'scope1':
+            return 'badge-primary';
+        case 'scope2':
+            return 'badge-warning';
+        case 'scope3':
+            return 'badge-success';
+        case 'separate':
+            return 'badge-info';
+        case 'removal':
+            return 'badge-danger';
+        default:
+            return 'badge-secondary'; // ค่าเริ่มต้นเมื่อไม่ตรงกับเงื่อนไขที่กำหนด
+    }
+};
+
   return (
     <div>
       <p className="h3">กิจกรรมการปล่อยก๊าซเรือนกระจก</p>
@@ -208,8 +225,10 @@ function TabActivity() {
         </div>
       ) : (
         activities.map((activity, activityIndex) => (
-          <div key={activityIndex}>
-            <p>{activity.name}</p>
+          <div className="card" key={activityIndex}>
+            <div className="card-header">
+																<h4><span className={`badge ${getBadgeClass(activity.name)}`}>{activity.name}</span></h4> 
+															</div>
 
             <div className="accordion" id={`accordion${activity.name}`}>
               {activity.headcategories.map((headCategory, headIndex) => (
@@ -406,7 +425,7 @@ function TabActivity() {
           className="card-header text-white"
           style={{
             background:
-              "linear-gradient(90deg, rgba(31,31,37,1) 0%, rgba(61,62,80,1) 50%, rgba(103,117,134,1) 100%)",
+              " linear-gradient(346deg, rgba(127,113,168,1) 0%, rgba(71,60,152,1) 100%)",
             marginTop: "auto",
           }}
         >
@@ -416,7 +435,7 @@ function TabActivity() {
           className="card-body"
           style={{
             background:
-              "linear-gradient(90deg, rgba(31,31,37,1) 0%, rgba(61,62,80,1) 50%, rgba(103,117,134,1) 100%)",
+              " linear-gradient(346deg, rgba(127,113,168,1) 0%, rgba(71,60,152,1) 100%)",
             marginTop: "auto",
           }}
         >

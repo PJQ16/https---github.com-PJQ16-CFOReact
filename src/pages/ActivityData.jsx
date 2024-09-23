@@ -13,6 +13,9 @@ import ForestIcon from '@mui/icons-material/Forest';
 import SearchIcon from '@mui/icons-material/Search';
 import Select from 'react-select';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import NewNavbar from '../components/NewNavbar';
+import Aside from '../components/Aside';
+import NewFooter from '../components/NewFooter';
 
 export default function Activitydata() {
     const { userData } = useContext(UserContext);
@@ -27,12 +30,12 @@ export default function Activitydata() {
 
     const fetchDataPeriod = async () => {
         try {
-            const res = await axios.get(config.urlApi + `/activity/showPeriod/${userData.facultyID}`);
+            const res = await axios.get(`${config.urlApi}/activity/showPeriod/${userData.facultyID}`);
             setDataPeriods(res.data);
         } catch (e) {
             Swal.fire({
                 icon: 'error',
-                title: 'error',
+                title: 'Error',
                 text: e.message
             });
         }
@@ -57,70 +60,108 @@ export default function Activitydata() {
 
     const totalPages = Math.ceil(filteredData.length / itemsPerPage);
 
-    // สร้างตัวเลือกสำหรับปีจาก dataPeriods
+    // Create options for years from dataPeriods
     const yearOptions = dataPeriods.map(item => ({
         value: item.years + 543,
         label: item.years + 543
     }));
 
     return (
-        <div>
-            <Navbar />
-            <Layout>
-                <Sidebar />
-                <Content>
-                    <p>
-                        <SearchIcon style={{ color: '#ffffff' }} />
-                        <Select
-                            options={yearOptions}
-                            onChange={handleSearchChange}
-                            isClearable
-                            placeholder={`ค้นหาปี..`}
-                            styles={{
-                                control: (base) => ({
-                                    ...base,
-                                    borderRadius: '20px',
-                                    border: '5px solid #cfc2',
-                                    paddingLeft: '20px',
-                                    marginTop: '2px',
-                                    color: 'black',
-                                    width:'200px'
-                                })
-                            }}
-                        />
-                    </p>
-                    <div className="row">
-                        {currentItems.map((item) =>
-                            <div className="col-md-4 col-sm-12 mt-2" key={item.id}>
-                                <div className="card" style={{ width: '18rem' }}>
-                                    {item.logo === '' ?
-                                        <img src='https://media.istockphoto.com/id/1248723171/vector/camera-photo-upload-icon-on-isolated-white-background-eps-10-vector.jpg?s=612x612&w=0&k=20&c=e-OBJ2jbB-W_vfEwNCip4PW4DqhHGXYMtC3K_mzOac0=' className="card-img-top" alt="..." />
-                                        :
-                                        <img src={`${config.urlApi}/logos/${userData.logo}`} className="card-img-top" alt="..." />
-                                    }
-                                    <div className="card-body">
-                                        <h5 className="card-title">ปล่อยก๊าซเรือนกระจก {item.years + 543}</h5>
-                                        <p className="card-text">กิจกรรมการปล่อยก๊าซเรือนกระจก ของวิทยาเขต {userData.campusName} หน่วยงาน {userData.facultyName}</p>
-                                        <Link to={`/activityDetail/${item.campus_id}/${item.fac_id}/${item.years + 543}/${item.id}`} className="btn text-white" style={{ backgroundColor: '#043C7F' }}>
-                                            <ForestIcon style={{ color: 'white' }} /> กิจกรรม
-                                        </Link>
+        <div className='app'>
+            <div id="app">
+                <div className="main-wrapper">
+                    <NewNavbar />
+                    <Aside />
+                    <div className="app-content">
+                        <section className="section">
+                            <p>
+                                <SearchIcon style={{ color: '#f0ebf6' }} />
+                                <Select
+                                    options={yearOptions}
+                                    onChange={handleSearchChange}
+                                    isClearable
+                                    placeholder={`ค้นหาปี..`}
+                                    styles={{
+                                        control: (base) => ({
+                                            ...base,
+                                            borderRadius: '20px',
+                                            border: '5px solid #f0ebf6',
+                                            paddingLeft: '20px',
+                                            marginTop: '2px',
+                                            color: 'black',
+                                            width: '200px'
+                                        })
+                                    }}
+                                />
+                            </p>
+
+                            <div className="row">
+                                {currentItems.map((item) => (
+                                    <div className="col-12 col-sm-6 col-lg-3" key={item.id}>
+                                        <div className="card card-secondary">
+                                            <div className="card-header">
+                                                {item.logo === '' ? (
+                                                    <img 
+                                                        src='https://media.istockphoto.com/id/1248723171/vector/camera-photo-upload-icon-on-isolated-white-background-eps-10-vector.jpg?s=612x612&w=0&k=20&c=e-OBJ2jbB-W_vfEwNCip4PW4DqhHGXYMtC3K_mzOac0=' 
+                                                        className="card-img-top" 
+                                                        alt="..." 
+                                                    />
+                                                ) : (
+                                                    <img 
+                                                        src={`${config.urlApi}/logos/${userData.logo}`} 
+                                                        className="img2" 
+                                                        alt="" 
+                                                    />
+                                                )}
+                                            </div>
+                                            <div className="card-body text-secondary">
+                                                <h4 className="bl_font">ปล่อยก๊าซเรือนกระจก {item.years + 543}</h4>
+                                                <span className="bl_font">กิจกรรมการปล่อยก๊าซเรือนกระจก ของวิทยาเขต {userData.campusName} หน่วยงาน {userData.facultyName}</span>
+                                            </div>
+                                            <div className="card-footer">
+                                                <Link 
+                                                    to={`/activityDetail/${item.campus_id}/${item.fac_id}/${item.years + 543}/${item.id}`} 
+                                                    className="btn text-white" 
+                                                >
+                                                    <button 
+                                                        type="button" 
+                                                        className="btn btn-primary btn-rounded w-md waves-effect m-b-5"
+                                                    >
+                                                        <i 
+                                                            className="fa fa-sign-out" 
+                                                            data-toggle="tooltip" 
+                                                            title="" 
+                                                            data-original-title="fa-sign-out"
+                                                        ></i> 
+                                                        กิจกรรม
+                                                    </button>
+                                                </Link>
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
+                                ))}
                             </div>
-                        )}
+
+                        </section>
+
+                        <nav>
+                            <ul className="pagination justify-content-end">
+                                {[...Array(totalPages)].map((_, i) => (
+                                    <li key={i + 1} className={`page-item ${i + 1 === currentPage ? 'active' : ''}`}>
+                                        <button 
+                                            className="page-link" 
+                                            onClick={() => handleClickPage(i + 1)}
+                                        >
+                                            {i + 1}
+                                        </button>
+                                    </li>
+                                ))}
+                            </ul>
+                        </nav>
                     </div>
-                    <nav>
-                        <ul className="pagination justify-content-center">
-                            {[...Array(totalPages)].map((_, i) => (
-                                <li key={i + 1} className={`page-item ${i + 1 === currentPage ? 'active' : ''}`}>
-                                    <button className="page-link" onClick={() => handleClickPage(i + 1)}>{i + 1}</button>
-                                </li>
-                            ))}
-                        </ul>
-                    </nav>
-                </Content>
-            </Layout>
-            <Footer />
+                    <NewFooter />
+                </div>
+            </div>
         </div>
     );
 }

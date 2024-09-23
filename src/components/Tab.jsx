@@ -1,21 +1,28 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 export default function Tab({ children }) {
+  // State to keep track of the active tab
+  const [activeTab, setActiveTab] = useState(0);
+
   return (
-    <div>
-      <ul className="nav nav-tabs mb-3 bg-light" id="pills-tab" role="tablist">
+    <div className="card-body">
+      <ul class="nav nav-pills pb-3" id="myTab3" role="tablist">
         {React.Children.map(children, (child, index) => (
-          <li className="nav-item" role="presentation">
+          <li className="nav-item" role="presentation" key={index}>
             <button
-              className={`nav-link ${index === 0 ? 'active' : ''}`}
-              style={{color:'#000'}}
+              className={`nav-link ${index === activeTab ? 'active' : ''}`}
+              style={{
+                color: '#ffffff',
+                backgroundColor: index === activeTab ? '#473c98' : '#bababa', // Change background based on active state
+              }}
               id={`pills-tab-${index}`}
               data-bs-toggle="pill"
               data-bs-target={`#pills-content-${index}`}
               type="button"
               role="tab"
               aria-controls={`pills-content-${index}`}
-              aria-selected={index === 0}
+              aria-selected={index === activeTab}
+              onClick={() => setActiveTab(index)} // Update active tab on click
             >
               {child.props.label}
             </button>
@@ -25,7 +32,7 @@ export default function Tab({ children }) {
       <div className="tab-content" id="pills-tabContent">
         {React.Children.map(children, (child, index) => (
           <div
-            className={`tab-pane  ${index === 0 ? 'show active' : ''}`}
+            className={`tab-pane ${index === activeTab ? 'show active' : ''}`}
             id={`pills-content-${index}`}
             role="tabpanel"
             aria-labelledby={`pills-tab-${index}`}

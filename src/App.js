@@ -11,6 +11,9 @@ import NotFound from './pages/NotFound'
 import './index.css'
 import ForgotPassword from './pages/ForgotPassword'
 import 'react-toastify/dist/ReactToastify.css';
+import NewTemplate from './pages/NewTemplate'
+import Measure from './pages/Measure'
+import MeasureDetail from './pages/MeasureDetail'
 
 function App() {
   return (
@@ -22,6 +25,9 @@ function App() {
     <Route path='/activityDetail/:campus_id/:fac_id/:years/:id' element={<ActivityDetail />} />
     <Route path='/forgot-password' element={<ForgotPassword />} />
     <Route path='*' element={<NotFound/>} />
+    <Route path='/measure' element={<Measure/>} />
+    <Route path='/measureDetail/:campus_id/:fac_id/:years/:id' element={<MeasureDetail />} />
+    <Route path='/home' element={<NewTemplate/>} />
    </Routes>
    </UserDataProvider>
   )

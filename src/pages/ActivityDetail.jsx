@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext } from "react";
 import Navbar from "../components/Navbar";
 import Layout from "../components/Layout";
 import Footer from "../components/Footer";
@@ -9,47 +9,59 @@ import TabActivityOrganization from "./Tab/TabActivityOrganization";
 import TabActivity from "./Tab/TabActivity";
 import TabActivitySummary from "./Tab/TabActivitySummary";
 import TabActivityReport from "./Tab/TabActivityReport";
-import config from "../config";
-import axios from "axios";
-import Swal from "sweetalert2";
 import { useParams } from "react-router-dom";
 import { UserContext } from '../components/MyContext';
+import NewNavbar from "../components/NewNavbar";
+import Aside from "../components/Aside";
+import NewFooter from "../components/NewFooter";
 
 function ActivityDetail() {
-  
-   const {id,fac_id} = useParams();
-   const {userData} = useContext(UserContext);
-
-   
+  const { id, fac_id,years } = useParams();
+  const { userData } = useContext(UserContext);
 
   return (
-    <div>
-      <Navbar />
+
+    <div className='app'>
+<div id="app">
+    <div className="main-wrapper" >
+   <NewNavbar/>
+   <Aside/>
+   <div className="app-content">
       <div className="row">
-       <div className="p-5">
+      <div class="col-12">
+         <div class="card">
+           <div class="card-header">
+              <h4>ข้อมูล LandScape หน่วยงาน {userData.facultyName} ปี {years}</h4>
+            </div>
           <Tab>
-            <div label="ข้อมูลทั่วไป">
-           <TabActivityInfo/>
+            <div label="ข้อมูลทั่วไป" className=" border-top">
+              <TabActivityInfo />
             </div>
-            <div label="แผนภาพองค์กร">
-            <TabActivityLocation/>
+            <div label="แผนภาพองค์กร" className=" border-top">
+              <TabActivityLocation />
             </div>
-            <div label="โครงสร้างองค์กร">
-            <TabActivityOrganization/>
+            <div label="โครงสร้างองค์กร" className=" border-top">
+              <TabActivityOrganization />
             </div>
-            <div label="กิจกรรมการปล่อยก๊าซเรือนกระจก" >
-            <TabActivity />
+            <div label="กิจกรรมแหล่งปล่อย" className=" border-top">
+              <TabActivity />
             </div>
-            <div label="สรุปผลการคำนวณ">
-            <TabActivitySummary/>
+            <div label="สรุปผลการคำนวณ" className=" border-top">
+              <TabActivitySummary />
             </div>
-            <div label="รายงาน">
-            <TabActivityReport/>
+            <div label="รายงาน" className=" border-top">
+              <TabActivityReport />
             </div>
           </Tab>
           </div>
-          </div>
-      <Footer />
+        </div>
+        </div>
+        </div>
+
+   <NewFooter/>
+   </div>
+   </div>
+
     </div>
   );
 }

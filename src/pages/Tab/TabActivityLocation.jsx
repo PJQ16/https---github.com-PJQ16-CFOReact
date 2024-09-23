@@ -157,7 +157,7 @@ return (
           showImages.map((image) => (
             <div key={image.id}>
               <button className="btn btn-danger rounded-circle mt-2" onClick={() =>handleRemoveImg(image.id)}><DeleteIcon/></button>
-             <div className="card">
+             <div className="">
             <div className="card-body d-flex flex-column justify-content-center align-items-center flex-wrap">
             <label htmlFor="fileInput">
                   <img
@@ -172,7 +172,7 @@ return (
             </div>
           ))
         ) : (
-          <div className="card">
+          <div className="">
             <div className="card-body d-flex justify-content-center align-items-center flex-wrap">
               {imageLocations.map((image, index) => (
                 <div key={index} style={{ position: 'relative', marginRight: '10px', marginBottom: '10px' }}>

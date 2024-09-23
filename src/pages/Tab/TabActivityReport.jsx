@@ -279,33 +279,38 @@ function TabActivityReport() {
                 <thead>
                   <tr className="text-center">
                     <th>วันที่ออกรายงาน</th>
-                    <th>รานงาน PDF</th>
-                    <th>รานงา Excel</th>
+                    <th className="bg-danger">รายงาน PDF <PictureAsPdfIcon/></th>
+                    <th className="bg-success">รายงาน Excel <TableViewIcon/></th>
                     <th>ลบรายงาน</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {reportData.map((data,index)=>
+                {reportData.length > 0 ? (
+                reportData.map((data, index) => (
                   <tr key={index} className="text-center">
                     <td>{data.createdAt}</td>
                     <td>
-                    <button className="btn btn-lg btn-primary" onClick={handleGeneratePDF}>
-                      <PictureAsPdfIcon fontSize="large" /> PDF
-                    </button>
-
+                      <button className="btn btn-lg btn-primary" onClick={handleGeneratePDF}>
+                        <PictureAsPdfIcon fontSize="large" /> PDF
+                      </button>
                     </td>
                     <td>
-                      <button className="btn  btn-lg btn-success"  onClick={handleDownload}>
+                      <button className="btn btn-lg btn-success" onClick={handleDownload}>
                         <TableViewIcon fontSize="large" /> Excel
                       </button>
                     </td>
                     <td>
-                      <button className="btn  btn-lg btn-danger" onClick={(e) => handleRemovalReport(data.id)}>
+                      <button className="btn btn-lg btn-danger" onClick={() => handleRemovalReport(data.id)}>
                         <DeleteIcon fontSize="large" /> ลบ
                       </button>
                     </td>
                   </tr>
-                  )}
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="4" className="text-center">ไม่พบรายงาน</td>
+                </tr>
+              )}
                 </tbody>
               </table>
             </div>

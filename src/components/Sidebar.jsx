@@ -68,7 +68,7 @@ export default function Sidebar() {
           onClick={() => handleLinkClick("A second button item")}
           style={{backgroundColor:'#696AAD'}}
         >
-          <FactoryIcon /> กิจกรรมปล่อยก๊าซ
+          <FactoryIcon /> ข้อมูลการปล่อยก๊าซเรือนกระจก
         </Link>
         <button
           type="button"
