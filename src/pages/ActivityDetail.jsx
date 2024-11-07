@@ -1,7 +1,4 @@
 import React, { useContext } from "react";
-import Navbar from "../components/Navbar";
-import Layout from "../components/Layout";
-import Footer from "../components/Footer";
 import Tab from "../components/Tab";
 import TabActivityInfo from "./Tab/TabActivityInfo";
 import TabActivityLocation from "./Tab/TabActivityLocation";
@@ -18,7 +15,6 @@ import NewFooter from "../components/NewFooter";
 function ActivityDetail() {
   const { id, fac_id,years } = useParams();
   const { userData } = useContext(UserContext);
-
   return (
 
     <div className='app'>
@@ -28,29 +24,29 @@ function ActivityDetail() {
    <Aside/>
    <div className="app-content">
       <div className="row">
-      <div class="col-12">
-         <div class="card">
-           <div class="card-header">
+      <div className="col-12">
+         <div className="card">
+           <div className="card-header">
               <h4>ข้อมูล LandScape หน่วยงาน {userData.facultyName} ปี {years}</h4>
             </div>
           <Tab>
             <div label="ข้อมูลทั่วไป" className=" border-top">
-              <TabActivityInfo />
+               <TabActivityInfo /> 
             </div>
             <div label="แผนภาพองค์กร" className=" border-top">
-              <TabActivityLocation />
+              <TabActivityLocation /> 
             </div>
             <div label="โครงสร้างองค์กร" className=" border-top">
-              <TabActivityOrganization />
+               <TabActivityOrganization /> 
             </div>
             <div label="กิจกรรมแหล่งปล่อย" className=" border-top">
-              <TabActivity />
+               <TabActivity /> 
             </div>
             <div label="สรุปผลการคำนวณ" className=" border-top">
-              <TabActivitySummary />
+                <TabActivitySummary /> 
             </div>
             <div label="รายงาน" className=" border-top">
-              <TabActivityReport />
+              <TabActivityReport /> 
             </div>
           </Tab>
           </div>

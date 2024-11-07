@@ -6,11 +6,13 @@ import { useParams } from "react-router-dom";
 import Accordion from "../../components/Accordion";
 import DownloadForOfflineIcon from "@mui/icons-material/DownloadForOffline";
 import CompareArrowsIcon from "@mui/icons-material/CompareArrows";
+import WarningIcon from '@mui/icons-material/Warning';
 function TabActivity() {
   const [activities, setActivities] = useState([]);
   const [quantities, setQuantities] = useState([]);
   const [sourcesFiles, setSourFiles] = useState("");
   const [exportSourcesFiles, setExportSourcesFiless] = useState([]);
+  const [isDisabled, setIsDisabled] = useState(true);
   const [countAvg, setCountAvg] = useState(null);
   const { id } = useParams();
   const [value, setValue] = useState(0);
@@ -18,6 +20,11 @@ function TabActivity() {
     fetchDataApi();
     fetchExportFile();
   }, [id]);
+
+  useEffect(() => {
+    setIsDisabled(!isQuarterlyFillDate()); // ถ้า isQuarterlyFillDate() เป็น true จะทำให้ isDisabled เป็น false
+  }, []);
+
   const fetchDataApi = async () => {
     try {
       const res = await axios.get(config.urlApi + `/scope/datasocpe/${id}`);
@@ -214,9 +221,29 @@ function TabActivity() {
     }
 };
 
+const isQuarterlyFillDate = () => {
+  const today = new Date();
+  const year = today.getFullYear() + 543; // แปลงปีให้เป็นพุทธศักราช
+  const month = today.getMonth() + 1; // เพิ่ม 1 เพื่อให้เดือนตรงกับปฏิทินปกติ
+  const date = today.getDate();
+
+  
+  // ตรวจสอบเงื่อนไขสำหรับวันที่ที่สามารถกรอกข้อมูลได้
+  //เงื่อนไขแรกจะ fixed ว่ามีการ กรอกข้อมูลของปี 2567  เดือน พฤศจิกา 2567 เวลา 8.00 น แต่ปีต่อๆ ไป จะเช็ค ตามไตรมาส เดือนที่ 4,7,10,1  
+  return (
+    ((year === 2567 && month === 11 && date <= 20) ||
+    ([4, 7, 10, 1].includes(month) && date <= 15))
+  );
+};
+
   return (
     <div>
       <p className="h3">กิจกรรมการปล่อยก๊าซเรือนกระจก</p>
+      {isDisabled && (
+        <div class="alert fw-bold p-4" role="alert" style={{borderColor:'yellow',backgroundColor:'#f8f5df'}}>
+         <WarningIcon size={40}/> ระบบปิดการกรอกข้อมูล
+      </div>
+      )}
       {activities.length === 0 ? (
         <div className="d-flex justify-content-center">
           <div className="spinner-border" role="status">
@@ -247,6 +274,7 @@ function TabActivity() {
                     <button
                       className="btn btn-success mb-2"
                       onClick={handdlerFuel}
+                      disabled={isDisabled}
                     >
                       <CompareArrowsIcon /> ซิงค์ข้อมูล
                     </button>
@@ -326,6 +354,7 @@ function TabActivity() {
                                             <form>
                                               <input
                                                 type="number"
+                                                disabled={isDisabled} 
                                                 style={{
                                                   borderRadius: "10px",
                                                   border: "1px solid gray",
@@ -471,6 +500,7 @@ function TabActivity() {
                 aria-describedby="inputGroupFileAddon04"
                 accept="application/pdf"
                 aria-label="Upload"
+                disabled={isDisabled} 
               />
               {sourcesFiles === "" ? (
                 <button
@@ -488,6 +518,7 @@ function TabActivity() {
                   type="button"
                   id="inputGroupFileAddon04"
                   onClick={handlerImportFile}
+                  disabled={isDisabled} 
                 >
                   เพิ่มหลักฐาน
                 </button>

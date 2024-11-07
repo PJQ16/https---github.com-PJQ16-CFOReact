@@ -1,49 +1,14 @@
 import React, { useEffect, useState } from 'react'
-import { Link, useLocation, useNavigate } from "react-router-dom";
-import HomeIcon from "@mui/icons-material/Home";
-import FactoryIcon from "@mui/icons-material/Factory";
-import ExitToAppIcon from "@mui/icons-material/ExitToApp";
-import Swal from "sweetalert2";
+import { Link } from "react-router-dom";
 import config from "../config";
 import axios from 'axios';
 export default function Aside() {
     const [measure,setMeasuer] = useState([]);
-    const location = useLocation();
     const [activeLink, setActiveLink] = useState("The current button");
-    const navigate = useNavigate();
     const handleLinkClick = (linkText) => {
       setActiveLink(linkText);
     };
 
-    const handlerSignOut = (event) => {
-        try {
-          event.preventDefault();
-          
-          Swal.fire({
-            icon: 'question',
-            title: 'ออกจากระบบ',
-            text: 'ต้องการออกจากระบบหรือไม่?',
-            showConfirmButton: true,
-            showCancelButton: true
-          }).then(res => {
-            if (res.isConfirmed) {
-              Swal.fire({
-                icon: 'success',
-                title: 'ออกจากระบบ',
-                text: 'ออกจากระบบเรียบร้อย',
-                showConfirmButton: false,
-                showCancelButton: false,
-                timer: 2000,
-                timerProgressBar: true,
-              })
-              localStorage.removeItem(config.token_name);
-              navigate('/login');
-            }
-          })
-        } catch (e) {
-          console.log(e.message);
-        }
-      }
 
       const fetchData = async() =>{
         try{
@@ -78,7 +43,7 @@ export default function Aside() {
             <a className="side-menu__item" data-toggle="slide" href="#"   onClick={() => handleLinkClick("The current button")}><i className="side-menu__icon fa fa-tasks"></i><span className="side-menu__label">กรอกข้อมูลมาตรการ</span><i className="angle fa fa-angle-right"></i></a>
            <ul className="slide-menu">
                   {measure.map((item,index)=>(
-              <Link to={`/measure?name=${encodeURIComponent(item.name)}&num=${encodeURIComponent(item.id)}`} className="slide-item">
+              <Link key={index} to={`/measure?name=${encodeURIComponent(item.name)}&num=${encodeURIComponent(item.id)}`} className="slide-item">
               {item.name}
             </Link>
               ))}

@@ -5,24 +5,28 @@ import config from '../../config';
 import { useParams } from 'react-router-dom';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ModeEditIcon from '@mui/icons-material/ModeEdit';
-
+import PublishIcon from '@mui/icons-material/Publish';
 function TabActivityOrganization() {
-  const [imageLocations, setImageLocations] = useState([]);
-  const [fileFr, setFileFr] = useState(3);
-  const fileInputRef = useRef(null);
+  const [imageOranizations, setImageOranization] = useState([]);
+  const [fileFr2, setFileFr2] = useState(3);
+  const fileInputRef2 = useRef(null);
   const {id} = useParams();
   const [activityPeriodId,setActivityPeriodId] = useState(id);
 
-  const [showImages,setShowImages] = useState([]);
-
+  const [showImages2,setShowImages2] = useState([]);
+  const [isDisabled, setIsDisabled] = useState(true);
 
   useEffect(()=>{
-    fetchImages();
+    fetchImageOranizations();
   },[])
-  const fetchImages = async()=>{
+
+  useEffect(() => {
+    setIsDisabled(!isQuarterlyFillDate()); // ถ้า isQuarterlyFillDate() เป็น true จะทำให้ isDisabled เป็น false
+  }, []);
+  const fetchImageOranizations = async()=>{
       try{
         const res = await axios.get(config.urlApi + `/images/ImageFr03/${id}`)
-        setShowImages(res.data);
+        setShowImages2(res.data);
         
       }catch(error){
         Swal.fire(
@@ -35,10 +39,10 @@ function TabActivityOrganization() {
       }
   }
 
-  const handleFileSelectLo = () => {
-    const fileLos = fileInputRef.current.files;
+  const handleFileSelectOr = () => {
+    const fileLos = fileInputRef2.current.files;
     if (fileLos && fileLos.length > 0) {
-      if (imageLocations.length + fileLos.length > 5) {
+      if (imageOranizations.length + fileLos.length > 5) {
         alert('You can only upload up to 5 images.');
         return;
       }
@@ -48,23 +52,23 @@ function TabActivityOrganization() {
         file: file,
       }));
 
-      setImageLocations((prevImages) => [...prevImages, ...newImages]);
+      setImageOranization((prevImages) => [...prevImages, ...newImages]);
     }
   };
 
   const handleImageRemove = (index) => {
-    const filteredImages = imageLocations.filter((image, i) => i !== index);
-    setImageLocations(filteredImages);
+    const filteredImages = imageOranizations.filter((image, i) => i !== index);
+    setImageOranization(filteredImages);
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     
     const formData = new FormData();
-    for (const image of imageLocations) {
+    for (const image of imageOranizations) {
       formData.append('images', image.file);
     }
-    formData.append('fileFr', fileFr);
+    formData.append('fileFr', fileFr2);
     formData.append('activityperiod_id',activityPeriodId);
   
     try {
@@ -89,7 +93,7 @@ function TabActivityOrganization() {
             'Content-Type': 'multipart/form-data'
           }
         });
-        fetchImages();
+        fetchImageOranizations();
       }
     } catch (error) {
       Swal.fire({
@@ -131,7 +135,7 @@ const handleRemoveImg = async (imgId) => {
         timer: 800,
         timerProgressBar: true
       });
-      fetchImages();
+      fetchImageOranizations();
       // คุณอาจต้องการทำการอัปเดต state เพื่อลบรูปภาพออกจากหน้าจอ
     } catch (error) {
       await Swal.fire({
@@ -143,15 +147,28 @@ const handleRemoveImg = async (imgId) => {
   }
 };
 
+const isQuarterlyFillDate = () => {
+  const today = new Date();
+  const year = today.getFullYear() + 543; // แปลงปีให้เป็นพุทธศักราช
+  const month = today.getMonth() + 1; // เพิ่ม 1 เพื่อให้เดือนตรงกับปฏิทินปกติ
+  const date = today.getDate();
 
+  
+  // ตรวจสอบเงื่อนไขสำหรับวันที่ที่สามารถกรอกข้อมูลได้
+  //เงื่อนไขแรกจะ fixed ว่ามีการ กรอกข้อมูลของปี 2567  เดือน พฤศจิกา 2567 เวลา 8.00 น แต่ปีต่อๆ ไป จะเช็ค ตามไตรมาส เดือนที่ 4,7,10,1  
+  return (
+    ((year === 2567 && month === 11 && date <= 20) ||
+    ([4, 7, 10, 1].includes(month) && date <= 15))
+  );
+};
 
 return (
   <div>
     <div className="row">
     <p className='h2 text-center'>โครงสร้างองค์กร</p>
       <div className="col-md-12 d-flex flex-column justify-content-center">
-        {showImages.length > 0 ? (
-          showImages.map((image) => (
+        {showImages2.length > 0 ? (
+          showImages2.map((image) => (
             <div key={image.id}>
                 <button className="btn btn-danger rounded-circle mt-2" onClick={() =>handleRemoveImg(image.id)}><DeleteIcon/></button>
              <div className="">
@@ -170,8 +187,13 @@ return (
           ))
         ) : (
           <div className="">
+            <div className="d-flex justify-content-start">
+            {imageOranizations.length > 0 && (
+              <button  className='btn-lg btn-primary'  disabled={isDisabled}  onClick={handleSubmit}><PublishIcon/> บันทึรูปภาพ</button>
+            )}
+            </div>
             <div className="card-body d-flex justify-content-center align-items-center flex-wrap">
-              {imageLocations.map((image, index) => (
+              {imageOranizations.map((image, index) => (
                 <div key={index} style={{ position: 'relative', marginRight: '10px', marginBottom: '10px' }}>
                   <img
                     src={image.src}
@@ -181,35 +203,36 @@ return (
                   />
                   <button
                     onClick={() => handleImageRemove(index)}
-                    style={{ position: 'absolute', top: '5px', right: '5px', background: 'transparent', border: 'none', cursor: 'pointer' }}
+                    style={{ position: 'absolute', top: '5px', right: '5px', background: 'transparent', border: 'none', cursor: 'pointer',color:'white' }}
                   >
                     &#x2715;
                   </button>
                 </div>
               ))}
-              {imageLocations.length < 5 && (
-                <label htmlFor="fileInput">
+              {imageOranizations.length < 5 && (
+                <label htmlFor="fileInputOR">
                   <img
                     src="https://media.istockphoto.com/id/1248723171/vector/camera-photo-upload-icon-on-isolated-white-background-eps-10-vector.jpg?s=612x612&w=0&k=20&c=e-OBJ2jbB-W_vfEwNCip4PW4DqhHGXYMtC3K_mzOac0="
                     alt="Upload"
                     className="img-fluid"
                   />
+                  <input
+                    id="fileInputOR"
+                    ref={fileInputRef2}
+                    type="file"
+                    style={{ display: 'none' }}
+                    multiple
+                    onChange={handleFileSelectOr}
+                    accept=".png, .jpg, .jpeg, .svg"
+                  />
                 </label>
               )}
-              <input
-                id="fileInput"
-                ref={fileInputRef}
-                type="file"
-                style={{ display: 'none' }}
-                multiple
-                onChange={handleFileSelectLo}
-                accept=".png, .jpg, .jpeg, .svg"
-              />
-              <input type="hidden" name="fileFr" value={fileFr} onChange={(e) => setFileFr(e.target.value)} />
+             
+              <input type="hidden" name="fileFr" value={fileFr2} onChange={(e) => setFileFr2(e.target.value)} />
               <input type="hidden" name="activityperiod_id" value={activityPeriodId} onChange={(e) => setActivityPeriodId(e.target.value)} />
             </div>
-            {imageLocations.length > 0 && ( // เพิ่มเงื่อนไขที่ตรวจสอบว่ามีไฟล์ที่ถูกเลือกเข้ามาหรือไม่
-  <button className='btn' style={{backgroundColor:'#D6C2F1'}} onClick={handleSubmit}>บันทึก</button>
+            {imageOranizations.length > 0 && ( // เพิ่มเงื่อนไขที่ตรวจสอบว่ามีไฟล์ที่ถูกเลือกเข้ามาหรือไม่
+  <button className='btn' style={{backgroundColor:'#D6C2F1'}}  disabled={isDisabled} onClick={handleSubmit}>บันทึก</button>
 )}
           </div>
         )}

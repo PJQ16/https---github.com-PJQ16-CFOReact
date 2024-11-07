@@ -6,7 +6,7 @@ export default function Tab({ children }) {
 
   return (
     <div className="card-body">
-      <ul class="nav nav-pills pb-3" id="myTab3" role="tablist">
+      <ul className="nav nav-pills pb-3" id="myTab3" role="tablist">
         {React.Children.map(children, (child, index) => (
           <li className="nav-item" role="presentation" key={index}>
             <button

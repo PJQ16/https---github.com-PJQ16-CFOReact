@@ -6,7 +6,7 @@ import { useParams } from 'react-router-dom';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
+import PublishIcon from '@mui/icons-material/Publish';
 function TabActivityLocation() {
   const [imageLocations, setImageLocations] = useState([]);
   const [fileFr, setFileFr] = useState(2);
@@ -15,12 +15,17 @@ function TabActivityLocation() {
   const [activityPeriodId,setActivityPeriodId] = useState(id);
 
   const [showImages,setShowImages] = useState([]);
+  const [isDisabled, setIsDisabled] = useState(true);
 
 
   useEffect(()=>{
-    fetchImages();
+    fetchImageLos();
   },[])
-  const fetchImages = async()=>{
+
+  useEffect(() => {
+    setIsDisabled(!isQuarterlyFillDate()); // ถ้า isQuarterlyFillDate() เป็น true จะทำให้ isDisabled เป็น false
+  }, []);
+  const fetchImageLos = async()=>{
       try{
         const res = await axios.get(config.urlApi + `/images/ImageFr02/${id}`)
         setShowImages(res.data);
@@ -90,7 +95,7 @@ function TabActivityLocation() {
             'Content-Type': 'multipart/form-data'
           }
         });
-        fetchImages();
+        fetchImageLos();
       }
     } catch (error) {
       Swal.fire({
@@ -132,7 +137,7 @@ const handleRemoveImg = async (imgId) => {
         timer: 800,
         timerProgressBar: true
       });
-      fetchImages();
+      fetchImageLos();
       // คุณอาจต้องการทำการอัปเดต state เพื่อลบรูปภาพออกจากหน้าจอ
     } catch (error) {
       await Swal.fire({
@@ -144,7 +149,20 @@ const handleRemoveImg = async (imgId) => {
   }
 };
 
-
+ const isQuarterlyFillDate = () => {
+    const today = new Date();
+    const year = today.getFullYear() + 543; // แปลงปีให้เป็นพุทธศักราช
+    const month = today.getMonth() + 1; // เพิ่ม 1 เพื่อให้เดือนตรงกับปฏิทินปกติ
+    const date = today.getDate();
+  
+    
+    // ตรวจสอบเงื่อนไขสำหรับวันที่ที่สามารถกรอกข้อมูลได้
+    //เงื่อนไขแรกจะ fixed ว่ามีการ กรอกข้อมูลของปี 2567  เดือน พฤศจิกา 2567 เวลา 8.00 น แต่ปีต่อๆ ไป จะเช็ค ตามไตรมาส เดือนที่ 4,7,10,1  
+    return (
+      ((year === 2567 && month === 11 && date <= 20) ||
+      ([4, 7, 10, 1].includes(month) && date <= 15))
+    );
+  };
 
 
 return (
@@ -173,6 +191,14 @@ return (
           ))
         ) : (
           <div className="">
+            <div className="d-flex justify-content-start">
+            {imageLocations.length > 0 && (
+              <button  className='btn-lg btn-primary'  disabled={isDisabled}  onClick={handleSubmit}><PublishIcon/> บันทึรูปภาพ</button>
+            )}
+            </div>
+           
+           
+             
             <div className="card-body d-flex justify-content-center align-items-center flex-wrap">
               {imageLocations.map((image, index) => (
                 <div key={index} style={{ position: 'relative', marginRight: '10px', marginBottom: '10px' }}>
@@ -184,36 +210,33 @@ return (
                   />
                   <button
                     onClick={() => handleImageRemove(index)}
-                    style={{ position: 'absolute', top: '5px', right: '5px', background: 'transparent', border: 'none', cursor: 'pointer' }}
+                    style={{ position: 'absolute', top: '5px', right: '5px', background: 'transparent', border: 'none', cursor: 'pointer',color:'white'  }}
                   >
                     &#x2715;
                   </button>
                 </div>
               ))}
-              {imageLocations.length < 5 && (
+             {imageLocations.length < 5 && (
                 <label htmlFor="fileInput">
                   <img
                     src="https://media.istockphoto.com/id/1248723171/vector/camera-photo-upload-icon-on-isolated-white-background-eps-10-vector.jpg?s=612x612&w=0&k=20&c=e-OBJ2jbB-W_vfEwNCip4PW4DqhHGXYMtC3K_mzOac0="
                     alt="Upload"
                     className="img-fluid"
                   />
+                  <input
+                    id="fileInput"
+                    ref={fileInputRef}
+                    type="file"
+                    style={{ display: 'none' }}
+                    multiple
+                    onChange={handleFileSelectLo}
+                    accept=".png, .jpg, .jpeg, .svg"
+                  />
                 </label>
               )}
-              <input
-                id="fileInput"
-                ref={fileInputRef}
-                type="file"
-                style={{ display: 'none' }}
-                multiple
-                onChange={handleFileSelectLo}
-                accept=".png, .jpg, .jpeg, .svg"
-              />
               <input type="hidden" name="fileFr" value={fileFr} onChange={(e) => setFileFr(e.target.value)} />
               <input type="hidden" name="activityperiod_id" value={activityPeriodId} onChange={(e) => setActivityPeriodId(e.target.value)} />
             </div>
-            {imageLocations.length > 0 && (
-              <button  className='btn' style={{backgroundColor:'#D6C2F1'}} onClick={handleSubmit}>บันทึก</button>
-            )}
           </div>
           
         )}

@@ -135,10 +135,10 @@ export default function TabActivitySummary() {
     }
   };
 
-
   return (
     <div>
        <p className="h2 ms-3">สรุปผลการคำนวณ</p>
+       {scopeData.length  > 0 ? ( 
       <div className="row">
        
             <div className="col-md-6 p-3">
@@ -360,6 +360,14 @@ export default function TabActivitySummary() {
               </div>
             </div>
           </div>
+      ) 
+      :
+      (
+        <>
+          ไม่พบข้อมูล
+        </>
+      )
+    }
         </div>
 
   );
