@@ -35,6 +35,9 @@ export default function Aside() {
             <Link  className="side-menu__item" to="/Activitydata"   onClick={() => handleLinkClick("The current button2")}><i className="side-menu__icon fa fa-calendar"></i><span className="side-menu__label">กรอกข้อมูลก๊าซเรือนกระจก</span></Link>
         </li>
 
+     
+
+
   {/*       <li>
             <Link  className="side-menu__item" to="/measure"   onClick={() => handleLinkClick("The current button3")}><i className="side-menu__icon fa fa-list"></i><span className="side-menu__label">กรอกข้อมูลมาตรการ</span></Link>
         </li> */}
@@ -48,7 +51,11 @@ export default function Aside() {
             </Link>
               ))}
             </ul> 
-        </li>       
+        </li>     
+
+           <li>
+            <Link  className="side-menu__item" to="/downloadfile"   onClick={() => handleLinkClick("The current button3")}><i className="side-menu__icon fa fa-download"></i><span className="side-menu__label">ดาวน์โหลดเอกสาร</span></Link>
+        </li>  
     </ul>
 </aside>
   )

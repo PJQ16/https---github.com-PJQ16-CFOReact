@@ -14,6 +14,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import NewTemplate from './pages/NewTemplate'
 import Measure from './pages/Measure'
 import MeasureDetail from './pages/MeasureDetail'
+import DownloadFile from './pages/DownloadFile'
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
     <Route path='/measure' element={<Measure/>} />
     <Route path='/measureDetail/:campus_id/:fac_id/:years/:id' element={<MeasureDetail />} />
     <Route path='/home' element={<NewTemplate/>} />
+    <Route path='/downloadfile' element={<DownloadFile/>} />
    </Routes>
    </UserDataProvider>
   )
